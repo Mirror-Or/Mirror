@@ -21,7 +21,7 @@ public class MonsterManager : Singleton<MonsterManager>, IManager
     public void SettingListAdd()                            // 몬스터의 정보를 넘기는 함수
     {
         _foundMonsterList = GameObject.FindGameObjectsWithTag("Monster").ToList();  // 상위 프리팹 가져옴 
-        for (int i = 0; i < _foundMonsterList.Count-1; i++)
+        for (int i = 0; i < _foundMonsterList.Count; i++)
         {
             int chileIndex = (int)generatorMonsterInfos[i].monsterType;     //타입이 뭔지 가져오기
             settingMonsterList.Add(_foundMonsterList[i].gameObject.transform.GetChild(chileIndex).gameObject);// 타입에 따라 프리팹 활성화
@@ -36,7 +36,8 @@ public class MonsterManager : Singleton<MonsterManager>, IManager
     {
         if(sceneName == SceneConstants.PlaygroundA) // 현재 씬이 PlaygroundA라면
         {
-            
+            _foundMonsterList = new List<GameObject>();
+            settingMonsterList = new List<GameObject>();
         }
     }
 
