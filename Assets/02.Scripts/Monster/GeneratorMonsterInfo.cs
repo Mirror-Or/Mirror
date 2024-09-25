@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class GeneratorMonsterInfo
 {
-   public GameObject movePositionGroup;
-   public MonsterManager.MonsterType monsterType;
-   public bool isMoving = true;
    public Transform startPosition;
+   public bool isMoving = true;
+   public MonsterManager.MonsterType monsterType;
+   public GameObject movePositionGroup;
 }
