@@ -29,6 +29,7 @@ public class MonsterManager : Singleton<MonsterManager>, IManager
             _monsterFsm = settingMonsterList[i].GetComponent<MonsterFSM>();
             _monsterFsm.isMovingMonster = generatorMonsterInfos[i].isMoving;    // 움직일지 여부 전달
             _monsterFsm.movePositionGroup = generatorMonsterInfos[i].movePositionGroup;// 움직일 경로 전달
+            _monsterFsm._startPosition = generatorMonsterInfos[i].startPosition.position;
         }
     }
 

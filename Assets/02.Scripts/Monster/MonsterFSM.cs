@@ -6,7 +6,7 @@ using UnityEngine.AI;
 public class MonsterFSM : MonoBehaviour,IDamage
 {
     //   기본 상태값
-    private Vector3 _startPosition;     // 학생(몬스터)의 시작 위치
+    public Vector3 _startPosition;     // 학생(몬스터)의 시작 위치
     [SerializeField] 
     private float monsterHp = 20f;      // 학생(몬스터)의 체력
     private bool _isDamaged = false;        // 학생(몬스터)의 피격확인용 변수
