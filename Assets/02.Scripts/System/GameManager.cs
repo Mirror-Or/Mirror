@@ -55,9 +55,10 @@ public class GameManager : Singleton<GameManager>, IManager
 
         DontDestroyOnLoad(gameObject); // GameManager가 씬 변경 시에도 파괴되지 않도록 설정
 
+        
+
         AudioSource bgmSource = GameObject.Find("BGM").GetComponent<AudioSource>();
         audioManager.SetBGMSource(bgmSource);
-
         sceneLoader = ComponentUtil.GetOrAddComponent<SceneLoader>(gameObject);
     }
 

@@ -21,10 +21,8 @@ public class StartSceneController : MonoBehaviour
         _audioManager = GameManager.audioManager;
         _uiManager = GameManager.uiManager;
         
-        GameObject gameManager = GameObject.Find("GameManager");
-        
         // 인트로 영상 출력
-        videoPlayer = _uiManager.GetOrAddUI<VideoCanvas>(ComponentUtil.FindChildObject(gameManager, "UI"));
+        videoPlayer = _uiManager.GetOrAddUI<VideoCanvas>(_uiManager.UIRoot);
         videoPlayer.SetVideoSetting(_videoSettings[0]);
 
         // 이벤트 구독
@@ -55,8 +53,6 @@ public class StartSceneController : MonoBehaviour
         // 비디오 종료 시 오디오 재생
         _audioManager.PlaySoundEffect(_audioClips[0], Vector3.zero, 1.0f);
     }
-
-
     
     /// <summary>
     /// 시작 버튼 클릭 시 호출 [추후 StartSceneCanvas로 이동]
