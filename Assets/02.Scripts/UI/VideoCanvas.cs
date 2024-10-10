@@ -8,7 +8,7 @@ using System;
 using UnityEngine.InputSystem;
 
 namespace UI{
-    public class VideoCanvas : MonoBehaviour
+    public class VideoCanvas : UIBase
     {
         private VideoPlayer _videoPlayer;               // 비디오 플레이어
         private TextMeshProUGUI _skipTextGUI;           // 스킵 텍스트
@@ -28,6 +28,14 @@ namespace UI{
         {
             Debug.Log("비디오 캔버스 시작");
             _anyKeyInputAction = GameManager.inputManager.GetInputActionStrategy("AnyKey") as AnyKeyInputAction;
+
+            _videoPlayer = Bind<VideoPlayer>("VideoPlayer");
+            _skipTextGUI = Bind<TextMeshProUGUI>("SkipText");
+            _skipTextGUI.gameObject.SetActive(false);   // 초기 SkipText 비활성화
+
+            foreach (var child in _childComponents){
+                Debug.Log($"Child: {child.Key}");
+            }
         }
 
         void Update()
@@ -62,10 +70,9 @@ namespace UI{
         public void SetVideoSetting(VideoSetting settings)
         {
             if(_videoPlayer == null){
-                _videoPlayer = GetComponent<VideoPlayer>();
-                _skipTextGUI = GetComponentInChildren<TextMeshProUGUI>();
-
-                _skipTextGUI.gameObject.SetActive(false);   // 초기 SkipText 비활성화
+                _videoPlayer = Bind<VideoPlayer>("VideoPlayer");
+                _skipTextGUI = Bind<TextMeshProUGUI>("SkipText");
+                _skipTextGUI.gameObject.SetActive(false);
             }
 
             // 비디오 플레이어 설정
