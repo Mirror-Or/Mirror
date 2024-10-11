@@ -43,7 +43,7 @@ public class PlayerCameraController : MonoBehaviour
     {
         mousePosition = new Vector2(Screen.width / 2f, Screen.height / 2f);
 
-        CameraManager.Instance.LockAndHideCursor(); // 마우스 커서 숨기기
+        MouseUtil.LockAndHideCursor(); // 마우스 커서 숨기기
     }
 
     void Update()

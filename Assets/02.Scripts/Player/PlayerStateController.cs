@@ -375,7 +375,6 @@ public class PlayerStateController : MonoBehaviour
         }
     }
 
-    
     private void SetSelectItem(){
         if(_inputActions.isChoiceQuickSlot){
             GameManager gameManager = GameManager.Instance;
@@ -394,9 +393,6 @@ public class PlayerStateController : MonoBehaviour
                     break;
                 }
             }
-
-            
-
         }
     }
 
@@ -410,7 +406,7 @@ public class PlayerStateController : MonoBehaviour
         if (_inputActions.isInteractable)
         {
             GameManager gameManager = GameManager.Instance;
-            PlayerCameraController cameraController = gameManager.cameraController;
+            PlayerCameraController cameraController = GameManager.cameraManager.GetCameraController<PlayerCameraController>("PlayerCamera");
             GameObject detetedItem = cameraController.detectedObject;
             
             // 아이템이 감지된 경우
@@ -485,9 +481,11 @@ public class PlayerStateController : MonoBehaviour
             InventoryManager inventoryManager = gameManager.inventoryManager;  // InventoryManager_Test 인스턴스
             UIManager uIManager = GameManager.uiManager;
 
+            PlayerCameraController cameraController = GameManager.cameraManager.GetCameraController<PlayerCameraController>("PlayerCamera");
+
             // 인벤토리 UI 활성화/비활성화
             inventoryManager.OnShowInventory();
-            gameManager.cameraController.SetCursorState(uIManager.Inventory().gameObject.activeSelf);   // 커서 상태 설정
+            cameraController.SetCursorState(uIManager.Inventory().gameObject.activeSelf);   // 커서 상태 설정
 
             _inputActions.isInventoryVisible = false;
         }

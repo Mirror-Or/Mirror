@@ -12,8 +12,6 @@ using Utils;
 public class GameManager : Singleton<GameManager>, IManager
 {
     #region Manager
-    public ItemManager itemManager;
-    public PlayerCameraController cameraController;         // 카메라 컨트롤러      x
     public UIController_Test uiController;            // UI 컨트롤러         x
     public PlayerStatus playerStatus;                 // 플레이어 상태        x
     public PlayerInventory playerInventory;           // 플레이어 인벤토리     x
@@ -28,8 +26,8 @@ public class GameManager : Singleton<GameManager>, IManager
     public static readonly ResourceManager resourceManager = new();       // 리소스 매니저
     public static readonly AudioManager audioManager = new();             // 오디오 매니저
     public static readonly PlayerManager playerManager = new();           // 플레이어 매니저
+    public static readonly CameraManager cameraManager = new();           // 카메라 매니저
 
-    // public static readonly CameraManager cameraManager = new();           // 카메라 매니저
     // public static readonly DialogueManager dialogueManager = new();       // 대화 매니저
     // public static readonly MonsterManager monsterManager = new();         // 몬스터 매니저
     // public static readonly ObjectPoolManager objectPoolManager = new();   // 오브젝트 풀 매니저
@@ -83,7 +81,7 @@ public class GameManager : Singleton<GameManager>, IManager
     public void Initialize(string sceneName)
     {
         inputManager.Initialize(sceneName);
-
+        cameraManager.Initialize(sceneName);
     }
 
 }
