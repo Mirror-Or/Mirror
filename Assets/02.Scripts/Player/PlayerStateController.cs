@@ -68,8 +68,10 @@ public class PlayerStateController : MonoBehaviour
     {
         _hasFPSAnimator = _FPSAnimator != null;
         _has3stAnimator = _3stAnimator != null;
+        Debug.Log($"FPS Animator: {_hasFPSAnimator} / 3st Animator: {_has3stAnimator}");
 
         _playerStatus = GameManager.playerManager.GetPlayerStatus();
+        Debug.Log($"Player Status: {_playerStatus.CurrentHealth}");
         _characterController = GetComponent<CharacterController>();
         _inputActions = GameManager.inputManager.GetInputActionStrategy("Player") as PlayerInputAction;
 
@@ -148,12 +150,6 @@ public class PlayerStateController : MonoBehaviour
         // 목표 속도와 현재 속도의 차이를 확인하여 가속 또는 감속을 처리
         if (Mathf.Abs(currentHorizontalSpeed - targetSpeed) > speedOffset)
         {
-            // // Mathf.Lerp는 선형 보간을 통해 속도를 자연스럽게 변경
-            // _speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude, Time.deltaTime * PlayerBasicSettings.speedChangeRate);
-
-            // // 속도를 소수점 3자리까지 반올림하여 처리
-            // _speed = Mathf.Round(_speed * 1000f) / 1000f;
-
             _speed = SmoothSpeedTransition(currentHorizontalSpeed, targetSpeed * inputMagnitude, PlayerBasicSettings.speedChangeRate);
         }
         else
@@ -510,58 +506,48 @@ public class PlayerStateController : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 공격 처리
-    /// </summary>
+    
+
     private void OnFire()
     {
-        if (_inputActions.isFire)
+        if(_inputActions.isFire)
         {
             Debug.Log($"{_attackTimeoutDelta} / {PlayerBasicSettings.attackDelay}");
 
             if(_attackTimeoutDelta > PlayerBasicSettings.attackDelay){
-
-                // 애니메이터가 존재하는 경우, 애니메이션 상태를 업데이트
-                if (_hasFPSAnimator)
-                {
-                    // _FPSAnimator.SetBool(_animIDAttack, true);
-                    _FPSAnimator.SetTrigger(_animIDAttack);
-                }
-
-                if(_has3stAnimator){
-                    _3stAnimator.SetTrigger(_animIDAttack);
-                }
-
-                Debug.Log("Attack");
-                //공격 사거리 내에 적이 있는지 확인
-                Collider[] hitColliders = Physics.OverlapSphere(transform.position, _playerStatus.CurrentAttackRange);
-                foreach (var hitCollider in hitColliders)
-                {
-                    // 적인 경우에만 데미지를 입힘
-                    if(hitCollider.CompareTag("Enemy")){
-                        IDamage target = hitCollider.GetComponent<IDamage>();
-
-                        if(target != null){
-                            target.TakeDamage((int)_playerStatus.CurrentAttackDamage);
-
-                            if(audioSource != null){
-                                // 공격 사운드 추가
-                                audioSource.clip = attackAudioClip;
-                                audioSource.volume = 0.5f;
-                                audioSource.Play();
-                            }
-
-                            Debug.Log($"공격 성공: {hitCollider.name}");                            
-                        }
-                    }
-                }
-
+                PerformAttack();
                 _attackTimeoutDelta = 0.0f; // 공격 타임아웃 초기화
             }else{
                 Debug.Log("공격 딜레이 중");
             }
 
             _inputActions.isFire = false;
+        }
+    }
+
+    // 범위 내의 적의 Collider를 가져옴
+    private Collider[] GetEnemiesInRange(Vector3 position, float range){
+        return Physics.OverlapSphere(position, range, LayerMask.GetMask("Enemy"));
+    }
+
+    private void PerformAttack(){
+        Debug.Log($"Attack Range: {_playerStatus.CurrentAttackRange} / playerPosition: {transform.position}");
+
+        // 애니메이터 처리
+        if(_hasFPSAnimator) _FPSAnimator.SetTrigger(_animIDAttack);
+        if(_has3stAnimator) _3stAnimator.SetTrigger(_animIDAttack);
+
+
+        // 공격 사거리 내 적을 가져옴
+        Collider[] hitColliders = GetEnemiesInRange(transform.position, _playerStatus.CurrentAttackRange);
+        foreach (var hitCollider in hitColliders){
+            if(hitCollider == null) continue; // continue로 null 스킵
+            if (hitCollider.TryGetComponent<IDamage>(out var target))
+            {
+                target.TakeDamage((int)_playerStatus.CurrentAttackDamage);
+                // PlayAttackSound();
+                Debug.Log($"공격 성공: {hitCollider.name}");
+            }
         }
     }
     

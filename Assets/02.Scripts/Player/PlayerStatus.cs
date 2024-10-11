@@ -33,7 +33,7 @@ public class PlayerBasicSettings
 /// <summary>
 /// 플레이어의 상태(체력, 스태미나)를 관리하는 클래스
 /// </summary>
-public class PlayerStatus : MonoBehaviour
+public class PlayerStatus
 {
     // 플레이어 상태가 추후 더 많은 상태를 다루게 된다면 딕셔너리 구조로 변경하는 것도 고려해볼만함
 
@@ -44,8 +44,7 @@ public class PlayerStatus : MonoBehaviour
 
     public Action<float> OnHealthChanged;   // 체력이 변경될 때 호출할 이벤트
 
-    void Awake()
-    {
+    public PlayerStatus(){
         CurrentHealth = PlayerBasicSettings.maxHealth; // 초기값을 maxHealth로 설정
         CurrentMental = PlayerBasicSettings.maxMental;
         CurrentAttackDamage = PlayerBasicSettings.attackDamage;

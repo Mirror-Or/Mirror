@@ -28,6 +28,7 @@ public class PlayerAnimationEventHandler : MonoBehaviour
                 // AudioSource.PlayClipAtPoint(footstepAudioClips[index], transform.TransformPoint(_characterController.center), footstepAudioVolume);
 
                 // AudioManager.Instance.PlaySoundEffect(footstepAudioClips[index], transform.TransformPoint(_characterController.center), footstepAudioVolume);
+                GameManager.audioManager.PlaySoundEffect(footstepAudioClips[index], transform.TransformPoint(_characterController.center), footstepAudioVolume);
             }
         }
     }
@@ -43,6 +44,7 @@ public class PlayerAnimationEventHandler : MonoBehaviour
             // AudioSource.PlayClipAtPoint(landingAudioClip, transform.TransformPoint(_characterController.center), footstepAudioVolume);
 
             // AudioManager.Instance.PlaySoundEffect(landingAudioClip, transform.TransformPoint(_characterController.center), footstepAudioVolume);
+            GameManager.audioManager.PlaySoundEffect(landingAudioClip, transform.TransformPoint(_characterController.center), footstepAudioVolume);
         }
     }
     #endregion

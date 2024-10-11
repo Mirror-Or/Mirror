@@ -54,6 +54,8 @@ public class PlayerManager :  IManager, IDamage
 	}
 
 	public PlayerStatus GetPlayerStatus(){
+		playerStatus ??= new();
+
 		return playerStatus;
 	}	
 
