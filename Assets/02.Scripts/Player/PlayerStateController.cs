@@ -70,7 +70,7 @@ public class PlayerStateController : MonoBehaviour
         _hasFPSAnimator = _FPSAnimator != null;
         _has3stAnimator = _3stAnimator != null;
 
-        _playerStatus = PlayerManager.Instance.GetPlayerStatus();
+        _playerStatus = GameManager.playerManager.GetPlayerStatus();
         _settings = _playerStatus.settings;
         _characterController = GetComponent<CharacterController>();
         _inputActions = GameManager.inputManager.GetInputActionStrategy("Player") as PlayerInputAction;

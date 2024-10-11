@@ -29,9 +29,9 @@ public class GameManager : Singleton<GameManager>, IManager
     public static readonly InputManager inputManager = new();             // 입력 매니저
     public static readonly ResourceManager resourceManager = new();       // 리소스 매니저
     public static readonly AudioManager audioManager = new();             // 오디오 매니저
+    public static readonly PlayerManager playerManager = new();           // 플레이어 매니저
 
     // public static readonly CameraManager cameraManager = new();           // 카메라 매니저
-    // public static readonly PlayerManager playerManager = new();           // 플레이어 매니저
     // public static readonly DialogueManager dialogueManager = new();       // 대화 매니저
     // public static readonly MonsterManager monsterManager = new();         // 몬스터 매니저
     // public static readonly ObjectPoolManager objectPoolManager = new();   // 오브젝트 풀 매니저
