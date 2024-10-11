@@ -9,7 +9,6 @@ using Utils;
 /// </summary>
 public class PlayerStateController : MonoBehaviour
 {
-    private PlayerStatus.PlayerBasicSettings _settings;  // PlayerBasicSettings를 참조
     private PlayerStatus _playerStatus;                 // PlayerStatus를 참조
     private float _speed = 0.0f;                    // 현재 속도
     private float _animationBlend;                  // 애니메이션 블렌드
@@ -71,7 +70,6 @@ public class PlayerStateController : MonoBehaviour
         _has3stAnimator = _3stAnimator != null;
 
         _playerStatus = GameManager.playerManager.GetPlayerStatus();
-        _settings = _playerStatus.settings;
         _characterController = GetComponent<CharacterController>();
         _inputActions = GameManager.inputManager.GetInputActionStrategy("Player") as PlayerInputAction;
 
@@ -135,7 +133,7 @@ public class PlayerStateController : MonoBehaviour
     private void OnMovement()
     {
         // 달리기 입력이 있는 경우, 속도를 RunSpeed로 설정
-        float targetSpeed = _inputActions.sprint ? _settings.runSpeed : _settings.walkSpeed;
+        float targetSpeed = _inputActions.sprint ? PlayerBasicSettings.runSpeed : PlayerBasicSettings.walkSpeed;
 
         // 이동 입력이 없는 경우, 속도를 0으로 설정
         if (_inputActions.move == Vector2.zero) targetSpeed = 0.0f;
@@ -151,12 +149,12 @@ public class PlayerStateController : MonoBehaviour
         if (Mathf.Abs(currentHorizontalSpeed - targetSpeed) > speedOffset)
         {
             // // Mathf.Lerp는 선형 보간을 통해 속도를 자연스럽게 변경
-            // _speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude, Time.deltaTime * _settings.speedChangeRate);
+            // _speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude, Time.deltaTime * PlayerBasicSettings.speedChangeRate);
 
             // // 속도를 소수점 3자리까지 반올림하여 처리
             // _speed = Mathf.Round(_speed * 1000f) / 1000f;
 
-            _speed = SmoothSpeedTransition(currentHorizontalSpeed, targetSpeed * inputMagnitude, _settings.speedChangeRate);
+            _speed = SmoothSpeedTransition(currentHorizontalSpeed, targetSpeed * inputMagnitude, PlayerBasicSettings.speedChangeRate);
         }
         else
         {
@@ -168,8 +166,8 @@ public class PlayerStateController : MonoBehaviour
         float targetBlend = (_inputActions.move.y >= 0) ? targetSpeed : -targetSpeed;
 
         // 애니메이션 블렌드를 처리하여 이동 애니메이션이 부드럽게 전환되도록 진행
-        // _animationBlend = Mathf.Lerp(_animationBlend, targetSpeed, Time.deltaTime * _settings.speedChangeRate);
-        _animationBlend = SmoothSpeedTransition(_animationBlend, targetBlend , _settings.speedChangeRate);
+        // _animationBlend = Mathf.Lerp(_animationBlend, targetSpeed, Time.deltaTime * PlayerBasicSettings.speedChangeRate);
+        _animationBlend = SmoothSpeedTransition(_animationBlend, targetBlend , PlayerBasicSettings.speedChangeRate);
 
         if (Mathf.Abs(_animationBlend) < 0.01f) _animationBlend = 0f;
 
@@ -273,7 +271,7 @@ public class PlayerStateController : MonoBehaviour
             {
 
                 // 수직 속도를 계산 (원하는 높이까지 올라가기 위한 속도 계산)
-                _verticalVelocity = Mathf.Sqrt(_settings.jumpHeight * -2.0f * _gravity);
+                _verticalVelocity = Mathf.Sqrt(PlayerBasicSettings.jumpHeight * -2.0f * _gravity);
 
                 if (_hasFPSAnimator)
                 {
@@ -412,7 +410,7 @@ public class PlayerStateController : MonoBehaviour
         if (_inputActions.isInteractable)
         {
             GameManager gameManager = GameManager.Instance;
-            CameraController cameraController = gameManager.cameraController;
+            PlayerCameraController cameraController = gameManager.cameraController;
             GameObject detetedItem = cameraController.detectedObject;
             
             // 아이템이 감지된 경우
@@ -521,9 +519,9 @@ public class PlayerStateController : MonoBehaviour
     {
         if (_inputActions.isFire)
         {
-            Debug.Log($"{_attackTimeoutDelta} / {_playerStatus.settings.attackDelay}");
+            Debug.Log($"{_attackTimeoutDelta} / {PlayerBasicSettings.attackDelay}");
 
-            if(_attackTimeoutDelta > _playerStatus.settings.attackDelay){
+            if(_attackTimeoutDelta > PlayerBasicSettings.attackDelay){
 
                 // 애니메이터가 존재하는 경우, 애니메이션 상태를 업데이트
                 if (_hasFPSAnimator)
