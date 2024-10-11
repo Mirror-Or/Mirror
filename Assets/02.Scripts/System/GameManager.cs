@@ -13,7 +13,7 @@ public class GameManager : Singleton<GameManager>, IManager
 {
     #region Manager
     public ItemManager itemManager;
-    public CameraController cameraController;         // 카메라 컨트롤러      x
+    public PlayerCameraController cameraController;         // 카메라 컨트롤러      x
     public UIController_Test uiController;            // UI 컨트롤러         x
     public PlayerStatus playerStatus;                 // 플레이어 상태        x
     public PlayerInventory playerInventory;           // 플레이어 인벤토리     x
@@ -24,8 +24,6 @@ public class GameManager : Singleton<GameManager>, IManager
 
     [Header("Managers")]
     public static readonly UIManager uiManager = new();                   // UI 매니저
-
-
     public static readonly InputManager inputManager = new();             // 입력 매니저
     public static readonly ResourceManager resourceManager = new();       // 리소스 매니저
     public static readonly AudioManager audioManager = new();             // 오디오 매니저

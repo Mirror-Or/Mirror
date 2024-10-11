@@ -411,7 +411,7 @@ namespace StarterAssets
             // 키를 입력 받은 경우 
             if(_input.pickupItem){ 
                 GameManager gameManager = GameManager.Instance;
-                CameraController cameraController = gameManager.cameraController;
+                PlayerCameraController cameraController = gameManager.cameraController;
 
                 if(cameraController.detectedObject != null){
                     // 아이템을 획득
