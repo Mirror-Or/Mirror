@@ -1,11 +1,10 @@
-using System;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem.OnScreen;
 
 public class Scratch : RaycastCheck, IInteractionable
 {
     [Header("코드 블록의 이름 마지막 글자는 모두 1~4 사이의 숫자로 통일")]
-    public GameObject[] codeBlock;      // 코드 블록을 담을 리스트
+    public List<GameObject> codeBlock;      // 코드 블록을 담을 리스트
     public Camera myCam;                // Raycast 및 화면 전환할 카메라
     public GameObject inputBlock;       // 코드 블록이 들어갈 위치
     public GameObject playButton;       // 실행 버튼
@@ -20,8 +19,8 @@ public class Scratch : RaycastCheck, IInteractionable
     private void Start()
     {
         // 코드 블록 기본 위치 세팅
-        codeBlockSetPos = new Vector3[codeBlock.Length];
-        for(int i = 0; i < codeBlock.Length; i++)
+        codeBlockSetPos = new Vector3[codeBlock.Count];
+        for(int i = 0; i < codeBlock.Count; i++)
         {
             codeBlockSetPos[i] = codeBlock[i].transform.localPosition;
         }
@@ -67,7 +66,7 @@ public class Scratch : RaycastCheck, IInteractionable
             }
             
             // 버튼의 수만큼 반복
-            for (var i = 0; i < codeBlock.Length; i++)
+            for (var i = 0; i < codeBlock.Count; i++)
             {
                 // Ray가 물체와 충돌하지 않았거나,  현재 비교 중인 객체와 충돌한 객체가 같은 경우
                 if (!RayHitCheck(Input.mousePosition, myCam, codeBlock[i].transform)) continue;
@@ -163,25 +162,31 @@ public class Scratch : RaycastCheck, IInteractionable
     // 들어가 있는 코드 블록에 따라 이벤트를 실행한다.
     private void PlayCode(GameObject getCodeBlock)
     {
-        // Debug.Log($"Num = {getCodeBlock.name.Substring(getCodeBlock.name.Length - 1, 1)}");
-
-        // getCodeBlock의 이름의 가장 뒷 부분의 숫자를 받아온다
-        switch (Convert.ToInt32(getCodeBlock.name.Substring(getCodeBlock.name.Length - 1, 1)))
+        for (int i = 0; i < codeBlock.Count; i++)
         {
-            // 숫자에 따라 각 이벤트가 실행된다 (추후 변경 예정)
-            case 1:
-                Debug.Log("괴물이 들어온다");
-                break;
-            case 2:
-                Debug.Log("시청각실");
-                break;
-            case 3:
-                Debug.Log("안돼, 넌 할 수 있어");
-                break;
-            case 4:
-                Debug.Log("받아들여");
-                break;
+            // getCodeBlock과 일치하는 오브젝트가 있을 경우
+            if (getCodeBlock == codeBlock[i]) return;
+            
+            switch (i)
+            {
+                // 숫자에 따라 각 이벤트가 실행된다 (추후 변경 예정)
+                case 0:
+                    Debug.Log("괴물이 들어온다");
+                    break;
+                case 1:
+                    Debug.Log("시청각실");
+                    break;
+                case 2:
+                    Debug.Log("안돼, 넌 할 수 있어");
+                    break;
+                case 3:
+                    Debug.Log("받아들여");
+                    break;
+            }
+            break;
         }
+        
+        
         // 상호작용을 종료한다
         EndInteraction();
     }
