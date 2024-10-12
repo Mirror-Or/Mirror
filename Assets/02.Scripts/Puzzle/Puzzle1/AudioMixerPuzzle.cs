@@ -2,13 +2,13 @@ using UnityEngine;
 
 public class AudioMixerPuzzle : RaycastCheck, IInteractionable
 {
-    public float maxMove;               // 슬라이더가 상하로 이동할 수 있는 최대 거리
-    public float buttonMoveSpeed = 1;   // 버튼이 이동하는 속도
-    public GameObject[] button;         // 버튼들을 담을 리스트
-    public Camera myCam;                // Raycast 및 화면 전환할 카메라
-    public bool open;
+    [SerializeField] private float maxMove;               // 슬라이더가 상하로 이동할 수 있는 최대 거리
+    [SerializeField] private float buttonMoveSpeed = 1;   // 버튼이 이동하는 속도
+    [SerializeField] private GameObject[] button;         // 버튼들을 담을 리스트
+    [SerializeField] private Camera myCam;                // Raycast 및 화면 전환할 카메라
+    [SerializeField] private bool isOpen;
 
-    public bool test;                    // 상호작용 테스트 용 변수   *임시*
+    [SerializeField] private bool test;                    // 상호작용 테스트 용 변수   *임시*
     
     private bool interaction;            // 상호 작용 확인
     private bool drag;                   // 드래그 중인지 확인할 bool 값
@@ -126,7 +126,7 @@ public class AudioMixerPuzzle : RaycastCheck, IInteractionable
         if (check == button.Length)
         {
             // 클리어로 변경함
-            open = true;
+            isOpen = true;
             Debug.Log("Clear");
             
             // 카메라를 끈다

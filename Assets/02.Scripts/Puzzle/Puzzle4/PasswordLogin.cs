@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class PasswordLogin : MonoBehaviour, IInteractionable
 {
-    public bool test;                  // 상호작용 테스트 용 변수 *임시*
+    [SerializeField] private bool test;                  // 상호작용 테스트 용 변수 *임시*
     
-    public TMP_InputField nowText;      // 현재 InputField에 적혀있는 답
+    [SerializeField] private TMP_InputField nowText;      // 현재 InputField에 적혀있는 답
 
-    public string password;             // 정답
+    [SerializeField] private string password;             // 정답
 
-    public GameObject myCam;                // 카메라 전환 용 카메라
+    [SerializeField] private GameObject myCam;                // 카메라 전환 용 카메라
 
     private bool interaction;           // 상호작용 변수
 

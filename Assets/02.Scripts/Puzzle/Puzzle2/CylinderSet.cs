@@ -6,28 +6,26 @@ using UnityEngine;
 public class CylinderSet : RaycastCheck, IInteractionable
 {
     [Tooltip("실린더 순서대로 넣기")]
-    public SpinCylinder[] spinCylinder;     // 회전할 객체를 넣을 리스트
+    [SerializeField] private SpinCylinder[] spinCylinder;     // 회전할 객체를 넣을 리스트
     
     [Tooltip("최대 회전 횟수")]
     public int[] cylinderSpinSet;           // 각 spinCylinder마다 회전할 수 있는 최대 회전 수
     
     [Tooltip("각 실린더 별 답")]
-    public int[] puzzleAnswer;              // 각 실린더 별로 맞춰져야하는 답
+    [SerializeField] private int[] puzzleAnswer;              // 각 실린더 별로 맞춰져야하는 답
     
     [Tooltip("각 실린더 별 현재 답")]
     // [HideInInspector]
     public int[] puzzleNowAnswer;           // 각 실린더의 현재 답
 
-    public bool test;                       // 상호작용 테스트 용 변수   *임시*
+    [SerializeField] private bool test;     // 상호작용 테스트 용 변수   *임시*
     
+    public float speed;   // 실린더들의 회전 속도
+    [SerializeField] private Camera myCam;  // Raycast에 사용되는 카메라
 
     private bool interaction;
     
-    private bool open;                      // 답이 맞을 경우 true가 됨
-
-    public float speed;                     // 실린더들의 회전 속도
-    
-    public Camera myCam;                    // Raycast에 사용되는 카메라
+    private bool isOpen;                      // 답이 맞을 경우 true가 
     
     void Awake()
     {
@@ -68,7 +66,7 @@ public class CylinderSet : RaycastCheck, IInteractionable
         if (puzzleAnswer.SequenceEqual(puzzleNowAnswer))
         {
             // 클리어 판정
-            open = true;
+            isOpen = true;
             Debug.Log("Clear!");
         }
         // 좌클릭을 했을 때

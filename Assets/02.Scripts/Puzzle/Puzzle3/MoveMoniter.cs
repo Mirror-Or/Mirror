@@ -3,9 +3,9 @@ using UnityEngine;
 
 public class MoveMoniter : MonoBehaviour, IInteractionable
 {
-    public float movePos = 1f;      // 한번에 움직이는 양
+    [SerializeField] private float movePos = 1f;      // 한번에 움직이는 양
 
-    public int nowAngle;            // (-1 : 왼쪽, 0 : 중간, 1 : 오른쪽) 과 같은 방식으로 현재 위치 및 방향을 확인하는 용도
+    private int nowAngle;            // (-1 : 왼쪽, 0 : 중간, 1 : 오른쪽) 과 같은 방식으로 현재 위치 및 방향을 확인하는 용도
     private bool move;              // 움직이는 중인지 확인
     private bool leftMove;          // true일 때 왼쪽으로 이동, false일 때 오른쪽으로 이동
 

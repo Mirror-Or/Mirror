@@ -4,11 +4,11 @@ using UnityEngine;
 public class LazerMon : MonoBehaviour
 {
     [Header("초기 세팅")]
-    public LayerMask reflectLayerMask;      // 레이저를 반사할 Layer
-    public LayerMask defaultLayerMask;      // 반사하지 않고 흡수할 Layer
-    public LayerMask clearObj;              // 레이저가 닿았을 때 클리어 될 Layer
-    public float defaultLength = 50;        // 레이저의 길이
-    public float reflectNum = 20;           // 반사 가능 횟수
+    [SerializeField] private LayerMask reflectLayerMask;      // 레이저를 반사할 Layer
+    [SerializeField] private LayerMask defaultLayerMask;      // 반사하지 않고 흡수할 Layer
+    [SerializeField] private LayerMask clearObj;              // 레이저가 닿았을 때 클리어 될 Layer
+    [SerializeField] private float defaultLength = 50;        // 레이저의 길이
+    [SerializeField] private float reflectNum = 20;           // 반사 가능 횟수
 
     private LineRenderer lineRenderer;      // 레이저 표시용 LineRenderer 변수
     private RaycastHit   hit;               // 오브젝트 충돌 체크용 Raycast 변수

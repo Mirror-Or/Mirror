@@ -4,16 +4,16 @@ using UnityEngine;
 public class Scratch : RaycastCheck, IInteractionable
 {
     [Header("코드 블록의 이름 마지막 글자는 모두 1~4 사이의 숫자로 통일")]
-    public List<GameObject> codeBlock;      // 코드 블록을 담을 리스트
-    public Camera myCam;                // Raycast 및 화면 전환할 카메라
-    public GameObject inputBlock;       // 코드 블록이 들어갈 위치
-    public GameObject playButton;       // 실행 버튼
+    [SerializeField] private List<GameObject> codeBlock;      // 코드 블록을 담을 리스트
+    [SerializeField] private Camera myCam;                // Raycast 및 화면 전환할 카메라
+    [SerializeField] private GameObject inputBlock;       // 코드 블록이 들어갈 위치
+    [SerializeField] private GameObject playButton;       // 실행 버튼
 
-    public bool test;                    // 상호작용 테스트 용 변수   *임시*
+    [SerializeField] private bool test;                    // 상호작용 테스트 용 변수   *임시*
 
     private Vector3[] codeBlockSetPos;   // 코드 블록들의 시작 위치
     private bool interaction;            // 상호 작용 확인
-    private bool drag;                   // 드래그 중인지 확인할 bool 값
+    private bool isDrag;                   // 드래그 중인지 확인할 bool 값
     private int nowDragButton;           // 현재 드래그 중인 버튼 확인 용도
 
     private void Start()
@@ -74,7 +74,7 @@ public class Scratch : RaycastCheck, IInteractionable
                 // 현재 드래그 중인 버튼을 i번째 버튼으로 지정
                 nowDragButton = i;
                 // 드래그 중으로 변환
-                drag = true;
+                isDrag = true;
             }
             
         }
@@ -82,7 +82,7 @@ public class Scratch : RaycastCheck, IInteractionable
         // 좌클릭이 끝났을 때
         if(Input.GetMouseButtonUp(0)){
             // 드래그 중지
-            drag = false;
+            isDrag = false;
             // 코드 블록과 Input Block의 거리를 잰다
             var distance = Vector3.Distance(codeBlock[nowDragButton].transform.position, inputBlock.transform.position);
 
@@ -117,7 +117,7 @@ public class Scratch : RaycastCheck, IInteractionable
         var buttonPos = codeBlock[nowDragButton].transform.localPosition;
         
         // 드래그 중일 때
-        if(drag)
+        if(isDrag)
         {
             // 마우스의 위치 값을 저장
             Vector3 position = new Vector3(Input.mousePosition.x,

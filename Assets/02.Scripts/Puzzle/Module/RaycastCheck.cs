@@ -11,8 +11,8 @@ public class RaycastCheck : MonoBehaviour
         Ray myRay = myCam.ScreenPointToRay(mousePosition);
         
         // Ray가 물체와 충돌했을 시 true, 아니면 false
-        bool weHitSomething = Physics.Raycast(myRay, out raycastHit);
+        bool isHit = Physics.Raycast(myRay, out raycastHit);
         
-        return weHitSomething && raycastHit.transform == target;
+        return isHit && raycastHit.transform == target;
     }
 }
