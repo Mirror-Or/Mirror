@@ -5,7 +5,7 @@ using UnityEngine;
 public class SpinCylinder : MonoBehaviour
 {
     public CylinderSet cylinderSet;   // CylinderSet에서 지정된 값 받아오는 용도
-    public bool ySpin;                // Y축 회전을 사용할 것인가
+    [SerializeField] private bool ySpin;                // Y축 회전을 사용할 것인가
 
     [HideInInspector] public int myNum; // CylinderSet이 지정한 번호를 받음
 

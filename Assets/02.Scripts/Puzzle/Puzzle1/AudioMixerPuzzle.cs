@@ -127,7 +127,7 @@ public class AudioMixerPuzzle : RaycastCheck, IInteractionable
         {
             // 클리어로 변경함
             open = true;
-            Debug.Log("Clear!");
+            Debug.Log("Clear");
             
             // 카메라를 끈다
             myCam.gameObject.SetActive(false);
