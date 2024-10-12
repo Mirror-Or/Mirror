@@ -10,19 +10,15 @@ using UnityEngine.UI;
 
 /// <summary>
 /// 카메라 컨트롤러 클래스
-/// 
-/// <para>
-/// author: Argonaut
-/// </para>
 /// </summary>
-public class CameraController : MonoBehaviour
+public class PlayerCameraController : MonoBehaviour
 {
 
-    [Header("Mouse Settings")]
+    // 마우스 관련 변수
     private Vector2 mousePosition;              // 마우스 위치
     private bool isCursorLocked = true;         // 마우스 커서 상태
 
-    [Header("Raycast Settings")]
+    // raycast를 위한 변수
     private Ray ray;                            // Raycast를 위한 Ray
     private RaycastHit hit;                     // Raycast를 통해 감지된 오브젝트
     public float maxDistance = 10f;             // Raycast 최대 거리
@@ -47,13 +43,12 @@ public class CameraController : MonoBehaviour
     {
         mousePosition = new Vector2(Screen.width / 2f, Screen.height / 2f);
 
-        CameraManager.Instance.LockAndHideCursor(); // 마우스 커서 숨기기
+        MouseUtil.LockAndHideCursor(); // 마우스 커서 숨기기
     }
 
     void Update()
     {
         CheckForObject();       //@todo: 추후 마우스 입력이 있을 때만 실행하도록 변경
-        // UpdateCursorState();
     }
 
     /// <summary>
@@ -145,10 +140,8 @@ public class CameraController : MonoBehaviour
     public void SetCursorState(bool state)
     {
         if(state){
-            // CameraManager.Instance.UnlockAndShowCursor();
             MouseUtil.UnlockAndShowCursor();
         }else{
-            // CameraManager.Instance.LockAndHideCursor();
             MouseUtil.LockAndHideCursor();
         }
     }

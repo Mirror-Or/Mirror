@@ -8,7 +8,7 @@ using System;
 using UnityEngine.InputSystem;
 
 namespace UI{
-    public class VideoCanvas : MonoBehaviour
+    public class VideoCanvas : UIBase
     {
         private VideoPlayer _videoPlayer;               // 비디오 플레이어
         private TextMeshProUGUI _skipTextGUI;           // 스킵 텍스트
@@ -20,40 +20,86 @@ namespace UI{
 
         public event Action OnVideoFinishedEvent;  // 비디오 종료 이벤트
 
-        private bool _canReceiveInput = true; // 입력을 받을 수 있는지 여부
-        private float _inputCooldownTime = 0.5f; // 쿨타임 (예: 0.5초)
-        private float _lastInputTime = 0f; // 마지막 입력 시간
+        private bool _canReceiveInput = true;           // 입력을 받을 수 있는지 여부
+        private float _inputCooldownTime = 0.5f;        // 쿨타임 (예: 0.5초)
+        private float _lastInputTime = 0f;              // 마지막 입력 시간
+
+        private Coroutine _inputCoroutine;              // 영상 재생 코루틴
 
         private void Awake()
         {
             Debug.Log("비디오 캔버스 시작");
             _anyKeyInputAction = GameManager.inputManager.GetInputActionStrategy("AnyKey") as AnyKeyInputAction;
+
+            _videoPlayer = Bind<VideoPlayer>("VideoPlayer");
+            _skipTextGUI = Bind<TextMeshProUGUI>("SkipText");
+            _skipTextGUI.gameObject.SetActive(false);   // 초기 SkipText 비활성화
+
+            foreach (var child in _childComponents){
+                Debug.Log($"Child: {child.Key}");
+            }
         }
 
-        void Update()
+        #region Coroutine
+        /// <summary>
+        /// 입력 처리 코루틴
+        /// </summary>
+        private IEnumerator HandleInput()
         {
-            if(IsVideoPlaying){
-                if(_anyKeyInputAction.IsAnyKeyPressed && _canReceiveInput){
-                    if(IsSkipTextActive){
+            Debug.Log("HandleInput 코루틴 실행");
+            while(IsVideoPlaying)
+            {
+                if(_anyKeyInputAction.IsAnyKeyPressed && _canReceiveInput)
+                {
+                    if(IsSkipTextActive)
+                    {
                         SetSkipTextActive(false);
                         StopVideo();
-                    }else{
+                    }
+                    else
+                    {
                         SetSkipTextActive(true);
                     }
-                    
-                    // 입력 처리 후 일정 시간 동안 입력을 받지 않도록 설정
+
                     _canReceiveInput = false;
                     _lastInputTime = Time.time;
                 }
 
-                // 쿨타임이 지나면 다시 입력을 받을 수 있도록 설정
-                if (!_canReceiveInput && Time.time - _lastInputTime > _inputCooldownTime)
+                // 쿨타임 처리
+                if(!_canReceiveInput && Time.time - _lastInputTime > _inputCooldownTime)
                 {
                     _canReceiveInput = true;
                 }
+
+                yield return null;  // 프레임마다 반복
             }
-            
+            Debug.Log("비디오 재생 중지, 코루틴 종료");
         }
+
+        /// <summary>
+        /// 코루틴 시작
+        /// </summary>
+        public void StartInputCoroutine()
+        {
+            if(_inputCoroutine == null)
+            {
+                Debug.Log("Input 코루틴 시작"); // 로그 추가
+                _inputCoroutine = StartCoroutine(HandleInput());
+            }
+        }
+
+        /// <summary>
+        /// 코루틴 종료
+        /// </summary>
+        public void StopInputCoroutine()
+        {
+            if(_inputCoroutine != null)
+            {
+                StopCoroutine(_inputCoroutine);
+                _inputCoroutine = null;
+            }
+        }
+        #endregion
 
         /// <summary>
         /// 비디오 컴포넌트 설정
@@ -62,10 +108,9 @@ namespace UI{
         public void SetVideoSetting(VideoSetting settings)
         {
             if(_videoPlayer == null){
-                _videoPlayer = GetComponent<VideoPlayer>();
-                _skipTextGUI = GetComponentInChildren<TextMeshProUGUI>();
-
-                _skipTextGUI.gameObject.SetActive(false);   // 초기 SkipText 비활성화
+                _videoPlayer = Bind<VideoPlayer>("VideoPlayer");
+                _skipTextGUI = Bind<TextMeshProUGUI>("SkipText");
+                _skipTextGUI.gameObject.SetActive(false);
             }
 
             // 비디오 플레이어 설정
@@ -90,9 +135,11 @@ namespace UI{
                 _videoPlayer = GetComponent<VideoPlayer>();
             }
 
-            // 비디오 재생 전 첫 프레임 대기
-            _videoPlayer.waitForFirstFrame = true;
-            _videoPlayer.Play();
+            // 비디오가 준비되었을 때 호출될 이벤트 핸들러 등록
+            _videoPlayer.prepareCompleted += OnVideoPrepared;
+
+            // 비디오를 준비 상태로 만듦
+            _videoPlayer.Prepare();
         }
 
         /// <summary>
@@ -107,23 +154,10 @@ namespace UI{
 
             _videoPlayer.Stop();
             OnVideoFinished(_videoPlayer);
+            StopInputCoroutine(); // 비디오가 정지되면 입력 처리 코루틴 종료
         }
 
-        /// <summary>
-        /// 비디오 일시 정지
-        /// </summary>
-        public void PauseVideo()
-        {
-            if (_videoPlayer == null)
-            {
-                _videoPlayer = GetComponent<VideoPlayer>();
-            }
-
-            _videoPlayer.Pause();
-        }
-        
-
-
+        // 일시정지 기능 일시적으로 제외 [ 추후 필요시 추가 ]
         #endregion
 
         #region Skip Text Control
@@ -181,13 +215,41 @@ namespace UI{
             _skipTextGUI.gameObject.SetActive(false);
         }
         #endregion
-    
+
+        /// <summary>
+        /// 비디오 재생이 끝났을 때 호출되는 함수
+        /// </summary>
         private void OnVideoFinished(VideoPlayer vp)
         {
-            GameManager.uiManager.UIFinished(gameObject);
+            StopInputCoroutine();           // 입력 처리 코루틴 종료
+            gameObject.SetActive(false);    // 비디오 캔버스 비활성화
 
-            // 비디오 종료 이벤트 발생
-            OnVideoFinishedEvent?.Invoke();
+            OnVideoFinishedEvent?.Invoke(); // 비디오 종료 이벤트 발생
+        }
+        
+        /// <summary>
+        /// 비디오 준비 완료 시 호출되는 함수
+        /// </summary>
+        private void OnVideoPrepared(VideoPlayer vp)
+        {
+            Debug.Log("비디오 준비 완료, 재생 시작");
+
+            // 비디오 재생 전 첫 프레임 대기
+            _videoPlayer.waitForFirstFrame = true;
+            _videoPlayer.Play();
+
+            // 비디오 재생 상태 확인
+            if(_videoPlayer.isPlaying)
+            {
+                Debug.Log("비디오가 재생 중입니다.");
+            }
+            else
+            {
+                Debug.LogWarning("비디오가 재생되지 않고 있습니다.");
+            }
+
+            // 입력 처리 코루틴 시작
+            StartInputCoroutine();
         }
     }
 }

@@ -11,42 +11,46 @@ public enum StatusType
 }
 
 /// <summary>
+/// 플레이어의 기본 설정을 관리하는 클래스
+/// </summary>
+public class PlayerBasicSettings
+{
+    // Player Maximum Settings
+    public static readonly float maxHealth = 100.0f;
+    public static readonly float maxMental = 100.0f;
+
+    // Player Movement Settings
+    public static readonly float walkSpeed = 2.0f;
+    public static readonly float runSpeed = 4.0f;
+    public static readonly float speedChangeRate = 10.0f;
+    public static readonly float jumpHeight = 1.0f;
+
+    // Player Attack Settings
+    public static readonly float attackRange = 1.5f;
+    public static readonly float attackDamage = 10.0f;
+    public static readonly float attackDelay = 1.0f;
+}
+/// <summary>
 /// 플레이어의 상태(체력, 스태미나)를 관리하는 클래스
 /// </summary>
-public class PlayerStatus : MonoBehaviour
+public class PlayerStatus
 {
-    [Serializable]
-    public class PlayerBasicSettings
-    {   
-        [Header("Player Maximum Settings")]
-        public readonly float maxHealth = 100.0f;       // 최대 체력
-        public readonly float maxMental = 100.0f;       // 최대 정신력
-
-        [Header("Player Movement Settings")]
-        public readonly float walkSpeed = 2.0f;         // 걷기 속도
-        public readonly float runSpeed = 4.0f;          // 달리기 속도
-        public readonly float speedChangeRate = 10.0f;  // 속도 변경 비율(가속도)
-        public readonly float jumpHeight = 1.0f;        // 점프 높이
-
-        [Header("Player Attack Settings")]
-        public readonly float attackRange = 1.5f;       // 공격 사정거리
-        public readonly float attackDamage = 10.0f;     // 공격 데미지
-        public readonly float attackDelay = 1.0f;       // 공격 딜레이(공속)
-    }
-
-    public PlayerBasicSettings settings = new();     // 기본 설정
+    // 플레이어 상태가 추후 더 많은 상태를 다루게 된다면 딕셔너리 구조로 변경하는 것도 고려해볼만함
 
     public float CurrentHealth { get; private set; }
     public float CurrentMental { get; private set; }
-    public float CurrentAttackRange { get; private set; }   
+    public float CurrentAttackRange { get; private set; }
     public float CurrentAttackDamage { get; private set; }
 
-    void Awake()
-    {
-        CurrentHealth = 60.0f;
-        CurrentMental = settings.maxMental;
-        CurrentAttackDamage = settings.attackDamage;
-        CurrentAttackRange = settings.attackRange;
+    public Action<float> OnHealthChanged;   // 체력이 변경될 때 호출할 이벤트
+
+    public PlayerStatus(){
+        CurrentHealth = PlayerBasicSettings.maxHealth; // 초기값을 maxHealth로 설정
+        CurrentMental = PlayerBasicSettings.maxMental;
+        CurrentAttackDamage = PlayerBasicSettings.attackDamage;
+        CurrentAttackRange = PlayerBasicSettings.attackRange;
+
+        OnHealthChanged += (value) => GameManager.uiManager.UpdateUIText(UIConstants.HP, value);
     }
 
     /// <summary>
@@ -54,16 +58,19 @@ public class PlayerStatus : MonoBehaviour
     /// </summary>
     /// <param name="statusType">조절할 Status</param>
     /// <param name="amount">조절 양</param>
-    public void AdjustStatus(StatusType statusType, float amount){
-        switch(statusType){
+    public void AdjustStatus(StatusType statusType, float amount)
+    {
+        switch(statusType)
+        {
             case StatusType.Health:
-                CurrentHealth += amount;
-                CurrentHealth = Mathf.Clamp(CurrentHealth, 0, settings.maxHealth);
-                GameManager.uiManager.UpdateUIText(UIConstants.HP,CurrentHealth);
+                float newHealth = Mathf.Clamp(CurrentHealth + amount, 0, PlayerBasicSettings.maxHealth);
+                if(newHealth != CurrentHealth){
+                    CurrentHealth = newHealth;
+                    OnHealthChanged?.Invoke(CurrentHealth);
+                }
                 break;
             case StatusType.Mental:
-                CurrentMental += amount;
-                CurrentMental = Mathf.Clamp(CurrentMental, 0, settings.maxMental);
+                CurrentMental = Mathf.Clamp(CurrentMental + amount, 0, PlayerBasicSettings.maxMental);
                 break;
         }
     }

@@ -46,15 +46,17 @@ public class UIManager : IManager
     // UI 프리팹을 저장하는 Dictionary
     private Dictionary<Type, GameObject> _uiPrefabs = new();
 
-    public Transform UIRoot { get; private set; }
-
-    /// <summary>
-    /// UI의 사용이 종료되었을 때 호출되는 함수
-    /// </summary>
-    /// <param name="uiObject">사용을 종료할 UI</param>
-    public void UIFinished(GameObject uiObject){
-        Debug.Log("UI Finished");
-        uiObject.SetActive(false);
+    private Transform _uiRoot;
+    public Transform UIRoot
+    {
+        get
+        {
+            if (_uiRoot == null)
+            {
+                _uiRoot = GameManager.Instance.transform.Find("UI");
+            }
+            return _uiRoot;
+        }
     }
 
     /// <summary>
@@ -108,7 +110,7 @@ public class UIManager : IManager
     public void Initialize(string sceneName)
     {
         if(sceneName == SceneConstants.StartScene){
-
+            
         }
 
         if(sceneName == SceneConstants.PlaygroundA){

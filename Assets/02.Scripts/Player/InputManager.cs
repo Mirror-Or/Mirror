@@ -18,8 +18,18 @@ public class InputManager : IManager
     public void Initialize(string sceneName)
     {
         if(sceneName == SceneConstants.StartScene){
+            InitInputAction();
+        }else if(sceneName == SceneConstants.PlaygroundB){
+            SwitchActionMap("Player");
+        }
+        
+    }
 
-            // inputAction = Resources.Load<InputActionAsset>("Input/PlayerInputActions");
+    /// <summary>
+    /// InputAction을 초기화
+    /// </summary>
+    private void InitInputAction(){
+        // inputAction = Resources.Load<InputActionAsset>("Input/PlayerInputActions");
             inputAction = GameManager.resourceManager.LoadResource<InputActionAsset>("Input/PlayerInputActions");
 
 
@@ -47,8 +57,6 @@ public class InputManager : IManager
 
             // 초기 상태로 AnyKey ActionMap 활성화
             SwitchActionMap("AnyKey");
-        }
-        
     }
 
     /// <summary>
