@@ -17,12 +17,15 @@ public class InputManager : IManager
     // IManager 인터페이스 구현
     public void Initialize(string sceneName)
     {
+        InitInputAction();
+
         if(sceneName == SceneConstants.StartScene){
             InitInputAction();
+        }else if(sceneName == SceneConstants.PlaygroundA){
+            SwitchActionMap("Player");
         }else if(sceneName == SceneConstants.PlaygroundB){
             SwitchActionMap("Player");
         }
-        
     }
 
     /// <summary>
