@@ -26,6 +26,8 @@ public class EKGGraph : MonoBehaviour
     private int previousY = 0;                  // 이전 Y 좌표
     private float ekgTime = 0f;                 // EKG 파형의 시간
 
+    private PlayerStatus _playerStatus;          // 플레이어 상태
+
     void Start()
     {
         // 그래프를 그릴 텍스처를 생성하고 RawImage에 설정
@@ -40,6 +42,8 @@ public class EKGGraph : MonoBehaviour
         }
 
         ClearTexture();                                     // 텍스처를 초기화
+
+        _playerStatus = GameManager.playerManager.GetPlayerStatus(); // 플레이어 상태를 가져옴
     }
 
     void Update()
@@ -62,7 +66,7 @@ public class EKGGraph : MonoBehaviour
         int yPos = 0;
 
         // HP가 0일 때 EKG를 수평으로 유지
-        if (GameManager.Instance.playerStatus.CurrentHealth <= 0)
+        if (_playerStatus.CurrentHealth <= 0)
         {
             yPos = height / 2; // 수평선의 Y 좌표 (화면 중앙)
         }
@@ -202,7 +206,7 @@ public class EKGGraph : MonoBehaviour
     /// </summary>
     private Color GetColorBasedOnHP()
     {
-        float hpRatio =  GameManager.Instance.playerStatus.CurrentHealth / PlayerBasicSettings.maxHealth;
+        float hpRatio =  _playerStatus.CurrentHealth / PlayerBasicSettings.maxHealth;
 
         if (hpRatio < 0.2f)
         {
@@ -221,7 +225,7 @@ public class EKGGraph : MonoBehaviour
     // 현재 HP 비율에 따라 심박수(BPM)를 조정
     private float GetCurrentBPM()
     {
-        float hpRatio = GameManager.Instance.playerStatus.CurrentHealth / PlayerBasicSettings.maxHealth;
+        float hpRatio = _playerStatus.CurrentHealth / PlayerBasicSettings.maxHealth;
 
         // HP가 100%일 때 기본 BPM을 사용하고, HP가 감소할수록 BPM을 증가
         float baseBPM = 60f;                                    // 기본 BPM
@@ -244,7 +248,7 @@ public class EKGGraph : MonoBehaviour
     // 현재 HP 비율에 따라 심전도 진폭을 조정
     private float GetWaveformAmplitude()
     {
-        float hpRatio = GameManager.Instance.playerStatus.CurrentHealth / PlayerBasicSettings.maxHealth;
+        float hpRatio =_playerStatus.CurrentHealth / PlayerBasicSettings.maxHealth;
 
         // HP가 100%일 때 기본 진폭을 사용하고, HP가 감소할수록 진폭을 증가
         float baseAmplitude = 0.05f;                            // 기본 진폭

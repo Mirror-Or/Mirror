@@ -12,12 +12,7 @@ using Utils;
 public class GameManager : Singleton<GameManager>, IManager
 {
     #region Manager
-    public UIController_Test uiController;            // UI 컨트롤러         x
-    public PlayerStatus playerStatus;                 // 플레이어 상태        x
-    public PlayerInventory playerInventory;           // 플레이어 인벤토리     x
-    public WeaponManager weaponManager;               // 무기 매니저
     public InventoryManager inventoryManager;         // 인벤토리 매니저
-    // public InputManager inputManager;                 // 입력 매니저
     #endregion
 
     [Header("Managers")]

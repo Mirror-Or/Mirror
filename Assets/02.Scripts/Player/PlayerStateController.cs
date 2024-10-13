@@ -343,52 +343,14 @@ public class PlayerStateController : MonoBehaviour
     {
         if (_inputActions.isUseItem)
         {
-            GameManager gameManager = GameManager.Instance;
-            PlayerInventory playerInventory = gameManager.playerInventory;
-
-            if(playerInventory.selectedItem != null){
-                Debug.Log($"선택된 아이템: {playerInventory.selectedItem.name}");
-                BaseItem targetItem = playerInventory.selectedItem.GetComponent<BaseItem>();
-                if(targetItem.IsUsable == false){
-                    Debug.Log("사용할 수 없는 아이템입니다.");
-                    _inputActions.isUseItem = false;
-                    return;
-                }
-
-                if(targetItem.Count > 0){
-                    targetItem.UseItem();                        // 아이템 사용
-                    targetItem.Count -= 1;                       // 아이템 개수 감소
-                    playerInventory.selectedItem = null;
-
-                    // if(targetItem.UseSound != null) gameManager.itemManager.PlaySound(targetItem.UseSound); // 아이템 사용 사운드 재생
-                    audioSource.clip = targetItem.UseSound;
-                    audioSource.Play();
-                    Debug.Log("아이템 사용");
-
-                }
-            }
+            Debug.Log("아이템 사용");
             _inputActions.isUseItem = false;
         }
     }
 
     private void SetSelectItem(){
         if(_inputActions.isChoiceQuickSlot){
-            GameManager gameManager = GameManager.Instance;
-            PlayerInventory playerInventory = gameManager.playerInventory;
-            InventoryManager inventoryManager = gameManager.inventoryManager;
-
-            // 선택된 퀵슬롯 번호에 해당하는 아이템을 선택
-            for(int i = 0; i < _inputActions.qucikSlots.Length; i++){
-                if(_inputActions.qucikSlots[i]){
-                        // 만일 해당 퀵슬롯에 아이템이 존재하는 경우
-                        if(playerInventory.quickSlots[i] != null){
-                        // playerInventory.selectedItem = playerInventory.quickSlots[i];
-                        playerInventory.selectedItem = playerInventory.quickSlots[i];
-                        Debug.Log($"선택된 아이템: {playerInventory.selectedItem.name}");
-                    }
-                    break;
-                }
-            }
+            Debug.Log("퀵슬롯 선택");
         }
     }
 

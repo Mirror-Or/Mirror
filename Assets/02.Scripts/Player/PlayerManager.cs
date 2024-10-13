@@ -7,8 +7,7 @@ public class PlayerManager :  IManager, IDamage
 	private GameObject _player; 		// 플레이어 오브젝트
 	private Vector3 _playerSpawnPoint; // 플레이어 스폰 위치
 
-    private PlayerStatus playerStatus; // 플레이어 상태 클래스
-	public Transform playerTransform;  // 플레이어 위치
+    private PlayerStatus _playerStatus; // 플레이어 상태 클래스
 
 	private AudioClip[] hitSound;    // 피격 효과음
     private AudioClip deathSound;    // 사망 효과음
@@ -54,16 +53,17 @@ public class PlayerManager :  IManager, IDamage
 	}
 
 	public PlayerStatus GetPlayerStatus(){
-		playerStatus ??= new();
+		_playerStatus ??= new();
 
-		return playerStatus;
+		return _playerStatus;
 	}	
 
+	// ReSharper disable Unity.PerformanceAnalysis
 	public void TakeDamage(int hitPower)
     {
-        if(playerStatus.CurrentHealth <= 0) return;  // 이미 사망한 경우 데미지를 받지 않음
+        if(_playerStatus.CurrentHealth <= 0) return;  // 이미 사망한 경우 데미지를 받지 않음
 
-        playerStatus.AdjustStatus(StatusType.Health, -hitPower);
+        _playerStatus.AdjustStatus(StatusType.Health, -hitPower);
 
         // 피격 효과음 재생
         // if(playerStatus.CurrentHealth > 0){
@@ -73,7 +73,7 @@ public class PlayerManager :  IManager, IDamage
 		// 	GameManager.audioManager.PlaySoundEffect(deathSound, playerTransform.position, 1.0f);
         // }
 
-        Debug.Log($"현재 체력 : {playerStatus.CurrentHealth}");
+        Debug.Log($"현재 체력 : {_playerStatus.CurrentHealth}");
     }
 
 }
