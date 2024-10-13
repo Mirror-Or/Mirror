@@ -64,19 +64,12 @@ public class Scratch : RaycastCheck, IInteractionable
                     Debug.Log("Error");
                 }
             }
-            
-            // 버튼의 수만큼 반복
-            for (var i = 0; i < codeBlock.Count; i++)
+            if(codeBlock.Find(n => n.transform == RayHitCheck(Input.mousePosition, myCam)))
             {
-                // Ray가 물체와 충돌하지 않았거나,  현재 비교 중인 객체와 충돌한 객체가 같은 경우
-                if (!RayHitCheck(Input.mousePosition, myCam, codeBlock[i].transform)) continue;
-                codeBlock[i].transform.SetParent(gameObject.transform);
-                // 현재 드래그 중인 버튼을 i번째 버튼으로 지정
-                nowDragButton = i;
-                // 드래그 중으로 변환
+                nowDragButton = codeBlock.FindIndex(n => n.transform == RayHitCheck(Input.mousePosition, myCam));
+                codeBlock[nowDragButton].transform.SetParent(gameObject.transform);
                 isDrag = true;
             }
-            
         }
         
         // 좌클릭이 끝났을 때

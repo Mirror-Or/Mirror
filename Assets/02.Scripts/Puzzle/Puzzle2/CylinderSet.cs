@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -15,7 +13,6 @@ public class CylinderSet : RaycastCheck, IInteractionable
     [SerializeField] private int[] puzzleAnswer;              // 각 실린더 별로 맞춰져야하는 답
     
     [Tooltip("각 실린더 별 현재 답")]
-    // [HideInInspector]
     public int[] puzzleNowAnswer;           // 각 실린더의 현재 답
 
     [SerializeField] private bool test;     // 상호작용 테스트 용 변수   *임시*
@@ -38,7 +35,7 @@ public class CylinderSet : RaycastCheck, IInteractionable
             // 컴포넌트 받아오기
             spinCylinder[i] = spinCylinder[i].GetComponent<SpinCylinder>();
             // SpinCylinder의 순서를 i로 지정
-            spinCylinder[i].myNum = i;
+            spinCylinder[i].thisCylinderNum = i;
             // puzzleNowAnswer의 현재 답을 0으로 세팅
             puzzleNowAnswer[i] = 0;
         }
@@ -78,18 +75,19 @@ public class CylinderSet : RaycastCheck, IInteractionable
 
     private void CylinderClick()
     {
-        // spinCylinder 안의 객체 별로 비교
-        foreach (var checkCylinder in spinCylinder)
+        // 클릭한 객체가 SpinCylinder일 때 PuzzleClick을 실행함
+        RayHitCheck(Input.mousePosition, myCam).transform.GetComponent<SpinCylinder>()?.PuzzleClick();
+    }
+    // 퍼즐의 현재 답을 바꿈
+    public void ChangeNowAnswer(int cylinderNum)
+    {
+        puzzleNowAnswer[cylinderNum]++;
+        // 만약 기본 값이 현재값보다 같거나 작을 시 0으로 바꿈
+        if (cylinderSpinSet[cylinderNum] <= puzzleNowAnswer[cylinderNum])
         {
-            // Ray가 물체와 충돌하였고,  현재 비교 중인 객체와 충돌한 객체가 같은 경우
-            if (RayHitCheck(Input.mousePosition, myCam, checkCylinder.transform))
-            {
-                // checkCylinder 객체의 PuzzleClick을 실행
-                checkCylinder.GetComponent<SpinCylinder>().PuzzleClick();
-            }
+            puzzleNowAnswer[cylinderNum] = 0;
         }
     }
-
     // 플레이어가 상호작용을 진행했을 경우
     public void Interaction()
     {
