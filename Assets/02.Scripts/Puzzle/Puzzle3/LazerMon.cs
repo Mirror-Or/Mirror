@@ -1,23 +1,20 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [RequireComponent(typeof(LineRenderer))]
 public class LazerMon : MonoBehaviour
 {
-    [Header("초기 세팅")]
-    [SerializeField] private LayerMask reflectLayerMask;      // 레이저를 반사할 Layer
-    [SerializeField] private LayerMask defaultLayerMask;      // 반사하지 않고 흡수할 Layer
-    [SerializeField] private LayerMask clearObj;              // 레이저가 닿았을 때 클리어 될 Layer
     [SerializeField] private float defaultLength = 50;        // 레이저의 길이
     [SerializeField] private float reflectNum = 20;           // 반사 가능 횟수
 
-    private LineRenderer lineRenderer;      // 레이저 표시용 LineRenderer 변수
-    private RaycastHit   hit;               // 오브젝트 충돌 체크용 Raycast 변수
+    private LineRenderer _lineRenderer;      // 레이저 표시용 LineRenderer 변수
+    private RaycastHit _hit;               // 오브젝트 충돌 체크용 Raycast 변수
     
     
     void Start()
     {
         // LineRenderer 컴포넌트 받아옴
-        lineRenderer = GetComponent<LineRenderer>();   
+        _lineRenderer = GetComponent<LineRenderer>();   
     }
 
     void Update()
@@ -33,9 +30,9 @@ public class LazerMon : MonoBehaviour
         var ray = new Ray(transform.position, transform.forward);
 
         // LineRenderer의 다음 도착 지점을 1로 설정
-        lineRenderer.positionCount = 1;
+        _lineRenderer.positionCount = 1;
         // LineRenderer 시작점 지정
-        lineRenderer.SetPosition(0, transform.position);
+        _lineRenderer.SetPosition(0, transform.position);
 
         // Raycast의 길이 변수를 defaultLength로 지정
         var resetLen = defaultLength;
@@ -44,36 +41,33 @@ public class LazerMon : MonoBehaviour
         for (int i = 0; i < reflectNum; i++)
         {
             // LineRenderer의 다음 지점을 추가
-            lineRenderer.positionCount += 1;
-            
-            // Raycast가 reflectLayerMask를 가진 오브젝트에 충돌했을 시
-            if (Physics.Raycast(ray.origin, ray.direction, out hit, resetLen, reflectLayerMask))
+            _lineRenderer.positionCount += 1;
+            if (Physics.Raycast(ray.origin, ray.direction, out _hit, resetLen))
             {
-                // LineRenderer를 이전 위치에서 충돌 지점까지 그림
-                lineRenderer.SetPosition(lineRenderer.positionCount - 1, hit.point);
+                LayerMask layer = _hit.transform.gameObject.layer;
                 
-                // ray를 충돌 지점에서 반사각만큼 회전한 방향으로 재생성
-                ray = new Ray(hit.point, Vector3.Reflect(ray.direction, hit.normal));
-            }
-            // Raycast가 defaultLayerMask를 가진 오브젝트에 충돌했을 시
-            else if (Physics.Raycast(ray.origin, ray.direction, out hit, resetLen, defaultLayerMask))
-            {
+                if (layer == LayerMask.NameToLayer("Reflect"))
+                {
+                    Debug.Log("반사");
+                    // ray를 충돌 지점에서 반사각만큼 회전한 방향으로 재생성
+                    ray = new Ray(_hit.point, Vector3.Reflect(ray.direction, _hit.normal));
+                }
+                else if (layer== LayerMask.NameToLayer("Clear"))
+                {
+                    ClearEvent();
+                }
                 // LineRenderer를 이전 위치에서 충돌 지점까지 그림
-                lineRenderer.SetPosition(lineRenderer.positionCount -1, hit.point);
+                _lineRenderer.SetPosition(_lineRenderer.positionCount - 1, _hit.point);
             }
-            // Raycast가 ClearObj를 가진 오브젝트에 충돌했을 시
-            else if (Physics.Raycast(ray.origin, ray.direction, out hit, resetLen, clearObj))
+            else
             {
-                // LineRenderer를 이전 위치에서 충돌 지점까지 그림
-                lineRenderer.SetPosition(lineRenderer.positionCount -1, hit.point);
-                
-                Debug.Log("Clear");     // 클리어 확인용
-            }
-            else // 그 이외
-            {
-                // LineRenderer를 (lineRenderer.positionCount - 1) 번의 충돌 지점에서 
-                lineRenderer.SetPosition(lineRenderer.positionCount - 1, ray.origin + (ray.direction * resetLen));
+                _lineRenderer.SetPosition(_lineRenderer.positionCount - 1, ray.origin + (ray.direction * resetLen));
             }
         }
+    }
+
+    private void ClearEvent()
+    {
+        Debug.Log("Clear");
     }
 }

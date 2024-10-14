@@ -11,9 +11,9 @@ public class AudioMixerPuzzle : RaycastCheck, IInteractionable
 
     [SerializeField] private bool test;                    // 상호작용 테스트 용 변수   *임시*
     
-    private bool interaction;            // 상호 작용 확인
-    private bool isDrag;                   // 드래그 중인지 확인할 bool 값
-    private int nowDragButton;           // 현재 드래그 중인 버튼 확인 용도
+    private bool _interaction;            // 상호 작용 확인
+    private bool _isDrag;                   // 드래그 중인지 확인할 bool 값
+    private int _nowDragButton;           // 현재 드래그 중인 버튼 확인 용도
     
     void Update()
     {
@@ -28,10 +28,10 @@ public class AudioMixerPuzzle : RaycastCheck, IInteractionable
             // 카메라를 끈다
             myCam.gameObject.SetActive(false);
             // 상호작용 종료
-            interaction = false;
+            _interaction = false;
         }
         
-        if (!interaction) return;   // 상호 작용 중일때만 사용할 수 있도록 함
+        if (!_interaction) return;   // 상호 작용 중일때만 사용할 수 있도록 함
         
         Drag(); // 드래그 감지
         ButtonMove(); // 버튼을 움직이는 용도
@@ -45,15 +45,15 @@ public class AudioMixerPuzzle : RaycastCheck, IInteractionable
             // 버튼의 수만큼 반복
             if(button.Find(n => n.transform == RayHitCheck(Input.mousePosition, myCam)))
             {
-                nowDragButton = button.FindIndex(n => n.transform == RayHitCheck(Input.mousePosition, myCam));
-                isDrag = true;
+                _nowDragButton = button.FindIndex(n => n.transform == RayHitCheck(Input.mousePosition, myCam));
+                _isDrag = true;
             }
         }
         
         // 좌클릭이 끝났을 때
         if(Input.GetMouseButtonUp(0)){
             // 드래그 중지
-            isDrag = false;
+            _isDrag = false;
             CheckClear();
         }
     }
@@ -61,16 +61,16 @@ public class AudioMixerPuzzle : RaycastCheck, IInteractionable
     private void ButtonMove()
     {
         // 현재 드래그 중인 버튼의 localPosition값을 받아옴
-        var buttonPos = button[nowDragButton].transform.localPosition;
+        var buttonPos = button[_nowDragButton].transform.localPosition;
         // 드래그 중일 때
-        if(isDrag)
+        if(_isDrag)
         {
             // 마우스의 위치 값을 저장
             Vector3 position = new Vector3(Input.mousePosition.x, Input.mousePosition.y, myCam.WorldToScreenPoint(transform.position).z);
             
             // 카메라 기준으로 position 값을 저장
             Vector3 worldPosition = myCam.ScreenToWorldPoint(position);
-            button[nowDragButton].transform.localPosition = new Vector3(buttonPos.x, buttonPos.y, Mathf.Clamp(worldPosition.z * buttonMoveSpeed,-maxMove, maxMove));
+            button[_nowDragButton].transform.localPosition = new Vector3(buttonPos.x, buttonPos.y, Mathf.Clamp(worldPosition.z * buttonMoveSpeed,-maxMove, maxMove));
         }
     }
 
@@ -104,7 +104,7 @@ public class AudioMixerPuzzle : RaycastCheck, IInteractionable
             // 카메라를 끈다
             myCam.gameObject.SetActive(false);
             // 상호작용 종료
-            interaction = false;
+            _interaction = false;
         }
     }
 
@@ -114,6 +114,6 @@ public class AudioMixerPuzzle : RaycastCheck, IInteractionable
         // 카메라를 켠다
         myCam.gameObject.SetActive(true);
         // 퍼즐을 풀 수 있도록 한다
-        interaction = true;
+        _interaction = true;
     }
 }

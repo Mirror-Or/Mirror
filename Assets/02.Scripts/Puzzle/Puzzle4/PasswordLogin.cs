@@ -12,7 +12,7 @@ public class PasswordLogin : MonoBehaviour, IInteractionable
 
     [SerializeField] private GameObject myCam;                // 카메라 전환 용 카메라
 
-    private bool interaction;           // 상호작용 변수
+    private bool _interaction;           // 상호작용 변수
 
     private void Update()
     {
@@ -28,14 +28,14 @@ public class PasswordLogin : MonoBehaviour, IInteractionable
             myCam.gameObject.SetActive(false);
             nowText.gameObject.SetActive(false);
             // 상호작용 종료
-            interaction = false;
+            _interaction = false;
         }
     }
 
     // 작성 후 Enter키를 눌렀을 때 실행됨
     public void Enter()
     {
-        if (!interaction) return;   // 상호 작용 중일때만 사용할 수 있도록 함
+        if (!_interaction) return;   // 상호 작용 중일때만 사용할 수 있도록 함
         // 현재 답과 정답이 일치할 경우 클리어
         if (nowText.text == password)
         {
@@ -44,7 +44,7 @@ public class PasswordLogin : MonoBehaviour, IInteractionable
             myCam.gameObject.SetActive(false);
             nowText.gameObject.SetActive(false);
             // 상호작용 종료
-            interaction = false;
+            _interaction = false;
         }
         // 아니면 필드에 작성된 텍스트를 지운다
         else
@@ -60,6 +60,6 @@ public class PasswordLogin : MonoBehaviour, IInteractionable
         myCam.SetActive(true);
         nowText.gameObject.SetActive(true);
         // 퍼즐을 풀 수 있도록 한다
-        interaction = true;
+        _interaction = true;
     }
 }
