@@ -14,7 +14,7 @@ public class PlayerMovementController
     
 
     // 이동 관련 변수
-    private float _speed;                    // 현재 플레이어의 이동 속도
+    private float _currentSpeed;             // 현재 플레이어의 이동 속도
     private float _horizontalSpeed;          // 캐릭터의 수평 방향 이동 속도 (X, Z 방향 속도)
     private Vector3 _moveDirection;          // 현재 이동 방향 (X, Z 방향)
     private float _targetSpeed;              // 목표 이동 속도 (걷기 또는 달리기 속도)
@@ -24,7 +24,7 @@ public class PlayerMovementController
     private float _speedChangeRate;          // 이동 속도 변경 비율 (속도 전환 속도)
 
     // 점프 관련 변수
-    private bool _isCharacterGrounded;        // 캐릭터가 땅에 붙어 있는지 여부
+    private bool _isGrounded;                // 캐릭터가 땅에 붙어 있는지 여부
     private float _verticalVelocity;         // 수직 속도 (점프 및 낙하 시 속도)
     private float _gravity;                  // 중력 값
     private float _jumpTimeout;              // 점프 후 재점프 가능 시간 (딜레이)
@@ -36,7 +36,6 @@ public class PlayerMovementController
     private float _groundedRadius;           // 땅 체크 반지름
 
     // 애니메이션 관련 변수
-    private float _motionSpeed;              // 이동 속도에 따른 애니메이션 속도
     private float _animationBlend;           // 애니메이션 블렌드 값 (이동 속도에 따른 애니메이션 전환 비율)
 
 
@@ -51,7 +50,7 @@ public class PlayerMovementController
 
     private void InitializeMovement(){
         // 이동 관련 변수 초기화
-        _speed = 0.0f;
+        _currentSpeed = 0.0f;
         _horizontalSpeed = 0.0f;
         _moveDirection = Vector3.zero;
         _targetSpeed = 0.0f;
@@ -62,7 +61,7 @@ public class PlayerMovementController
         _animationBlend = 0.0f;
 
         // 점프 관련 변수 초기화
-        _isCharacterGrounded = false;
+        _isGrounded = false;
         _verticalVelocity = 0.0f;
         _gravity = -9.81f;
         _jumpTimeout = 0.0f;
@@ -75,16 +74,17 @@ public class PlayerMovementController
 
     public void HandleMovement()
     {
-        MovementProcess();
-
-        // 이동 애니메이션 처리
-        HandleMovementAnimation(_targetSpeed, _speedChangeRate);
+        // 이동 처리
+        ProcessMovement();
 
         // 점프 처리
-        HandleJump();
+        ProcessJump();
+        
+        // 앉기 처리
+        ProcessSit();
     }
 
-    private void MovementProcess()
+    private void ProcessMovement()
     {
         // 이동 속도 결정
         _targetSpeed = _inputActions.sprint ? _runSpeed : _walkSpeed;
@@ -96,25 +96,27 @@ public class PlayerMovementController
         _moveDirection = _characterController.transform.TransformDirection(_moveDirection).normalized;
 
         // 현재 수평 속도 계산 (velocity 대신 이동 방향과 속도 사용)
-        _horizontalSpeed = new Vector3(_moveDirection.x, 0.0f, _moveDirection.z).magnitude * _speed;
+        _horizontalSpeed = new Vector3(_moveDirection.x, 0.0f, _moveDirection.z).magnitude * _currentSpeed;
 
-        Debug.Log($"currentHorizontalSpeed : {_horizontalSpeed}");
+        // Debug.Log($"currentHorizontalSpeed : {_horizontalSpeed}");
 
         // 목표 속도와 현재 속도의 차이를 확인하여 가속 또는 감속을 처리
         if(Mathf.Abs(_horizontalSpeed - _targetSpeed) > _speedOffset)
         {
-            _speed = Mathf.Lerp(_horizontalSpeed, _targetSpeed, Time.deltaTime * _speedChangeRate);
+            _currentSpeed = Mathf.Lerp(_horizontalSpeed, _targetSpeed, Time.deltaTime * _speedChangeRate);
         }
         else
         {
-            _speed = _targetSpeed;
+            _currentSpeed = _targetSpeed;
         }
 
         // 캐릭터 이동 처리
-        if(_speed > 0 || Mathf.Abs(_verticalVelocity) > 0)
+        if(_currentSpeed > 0 || Mathf.Abs(_verticalVelocity) > 0)
         {
-            _characterController.Move(_moveDirection * (_speed * Time.deltaTime) + new Vector3(0, _verticalVelocity, 0) * Time.deltaTime);
+            _characterController.Move(_moveDirection * (_currentSpeed * Time.deltaTime) + new Vector3(0, _verticalVelocity, 0) * Time.deltaTime);
         }
+
+        HandleMovementAnimation(_currentSpeed, _speedChangeRate);
     }
 
     
@@ -126,14 +128,11 @@ public class PlayerMovementController
 
         // AnimationController에 애니메이션 정보를 전달
         _animationController.SetAnimationFloat(AnimatorParameters.Speed, _animationBlend);
-
-        _motionSpeed = _inputActions.analogMovement ? _inputActions.move.magnitude : 1f;
-        _animationController.SetAnimationFloat(AnimatorParameters.MotionSpeed, _motionSpeed);
     }
 
-    private void HandleJump()
+    private void ProcessJump()
     {
-        if(_isCharacterGrounded)
+        if(_isGrounded)
         {
             // 땅에 붙어 있는 경우 점프 애니메이션 및 속도 초기화
             _fallTimeout = 0.15f;
@@ -182,14 +181,22 @@ public class PlayerMovementController
     /// <param name="groundCheckPosition"></param>
     /// <param name="groundCheckRadius"></param>
     /// <param name="groundLayers"></param>
-    public void CheckGroundedStatus(Vector3 groundCheckPosition, LayerMask groundLayers)
+    public void UpdateGroundedStatus(Vector3 groundCheckPosition, LayerMask groundLayers)
     {
         // 땅에 붙어 있는지 여부를 체크
-        _isCharacterGrounded = Physics.CheckSphere(groundCheckPosition, _groundedRadius, groundLayers, QueryTriggerInteraction.Ignore);
+        _isGrounded = Physics.CheckSphere(groundCheckPosition, _groundedRadius, groundLayers, QueryTriggerInteraction.Ignore);
 
         // 애니메이션에 grounded 상태 반영
-        _animationController.SetAnimationBool(AnimatorParameters.IsGrounded, _isCharacterGrounded);
+        _animationController.SetAnimationBool(AnimatorParameters.IsGrounded, _isGrounded);
     }
     
+    // 앉기 처리    
+    private void ProcessSit(){
+        if(_inputActions.isSit){
+            _animationController.SetAnimationBool(AnimatorParameters.IsSitting, true);
+        }else{
+            _animationController.SetAnimationBool(AnimatorParameters.IsSitting, false);
+        }
+    }
 
 }   

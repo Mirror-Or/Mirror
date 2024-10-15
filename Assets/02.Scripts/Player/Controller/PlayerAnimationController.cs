@@ -13,10 +13,8 @@ public class AnimatorParameters
     public static readonly string IsGrounded = "Grounded";
     public static readonly string IsJumping = "Jump";
     public static readonly string IsInFreeFall = "FreeFall";
-    public static readonly string MotionSpeed = "MotionSpeed";
     public static readonly string IsAttacking = "Attack";
     public static readonly string IsSitting = "Sit";
-
 
 }
 

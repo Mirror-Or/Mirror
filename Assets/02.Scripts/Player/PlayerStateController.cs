@@ -82,7 +82,6 @@ public class PlayerStateController : MonoBehaviour
         ShowInventory();
         OnFire();
         ShowQuickSlot();
-        OnSit();
 
         SetSelectItem();
 
@@ -100,7 +99,7 @@ public class PlayerStateController : MonoBehaviour
     }
 
     private void FixedUpdate() {
-        _movementController.CheckGroundedStatus(transform.position + Vector3.down * 0.14f, _groundLayers);
+        _movementController.UpdateGroundedStatus(transform.position + Vector3.down * 0.14f, _groundLayers);
     }
 
 
