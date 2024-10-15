@@ -5,7 +5,6 @@ using UnityEngine;
 public class PlayerAnimationEventHandler : MonoBehaviour
 {
     [Header("Audio Settings")]
-    [SerializeField] private AudioSource audioSource;                        // 오디오 소스
     [SerializeField] private AudioClip landingAudioClip;                     // 착지 사운드
     [SerializeField] private AudioClip[] footstepAudioClips;                 // 발소리 사운드
     [SerializeField, Range(0, 1)] private float footstepAudioVolume = 0.5f;  // 발소리 사운드 볼륨
@@ -24,10 +23,7 @@ public class PlayerAnimationEventHandler : MonoBehaviour
         {
             if (footstepAudioClips.Length > 0)
             {
-                var index = UnityEngine.Random.Range(0, footstepAudioClips.Length);
-                // AudioSource.PlayClipAtPoint(footstepAudioClips[index], transform.TransformPoint(_characterController.center), footstepAudioVolume);
-
-                // AudioManager.Instance.PlaySoundEffect(footstepAudioClips[index], transform.TransformPoint(_characterController.center), footstepAudioVolume);
+                var index = Random.Range(0, footstepAudioClips.Length);
                 GameManager.audioManager.PlaySoundEffect(footstepAudioClips[index], transform.TransformPoint(_characterController.center), footstepAudioVolume);
             }
         }
@@ -41,9 +37,6 @@ public class PlayerAnimationEventHandler : MonoBehaviour
     {
         if (animationEvent.animatorClipInfo.weight > 0.5f)
         {
-            // AudioSource.PlayClipAtPoint(landingAudioClip, transform.TransformPoint(_characterController.center), footstepAudioVolume);
-
-            // AudioManager.Instance.PlaySoundEffect(landingAudioClip, transform.TransformPoint(_characterController.center), footstepAudioVolume);
             GameManager.audioManager.PlaySoundEffect(landingAudioClip, transform.TransformPoint(_characterController.center), footstepAudioVolume);
         }
     }
