@@ -40,6 +40,10 @@ public class PlayerCameraController
         _playerCamera.localRotation = targetRotation;
     }
 
+    public void UpdateCameraPosition(Transform pointTR){
+        _playerCamera.transform.position = pointTR.position  + pointTR.right * -0.2f;
+    }
+
     /// <summary>
     /// 커서 상태를 설정하는 함수
     /// </summary>

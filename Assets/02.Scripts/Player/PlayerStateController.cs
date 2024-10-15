@@ -110,7 +110,7 @@ public class PlayerStateController : MonoBehaviour
         _cameraController.UpdateCameraRotation(_inputActions.look.y * _rotationSmoothTime);
         UpdateChestBoneRotation();
 
-        _playerCamera.transform.position = _playerChestTR.transform.position + _playerChestTR.transform.right * -0.2f;
+        _cameraController.UpdateCameraPosition(_playerChestTR);
 
     }
 
