@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,10 +10,8 @@ public class PlayerMovementController
 {
     // 필요 컴포넌트 및 클래스
     private CharacterController _characterController;
-    private PlayerInputAction _inputActions;
     private PlayerAnimationController _animationController;
     
-
     // 이동 관련 변수
     private float _currentSpeed;             // 현재 플레이어의 이동 속도
     private float _horizontalSpeed;          // 캐릭터의 수평 방향 이동 속도 (X, Z 방향 속도)
@@ -40,10 +39,9 @@ public class PlayerMovementController
     private float _animationBlend;           // 애니메이션 블렌드 값 (이동 속도에 따른 애니메이션 전환 비율)
 
 
-    public PlayerMovementController(CharacterController characterController, PlayerInputAction inputActions, PlayerAnimationController animationController)
+    public PlayerMovementController(CharacterController characterController, PlayerAnimationController animationController)
     {
         _characterController = characterController;
-        _inputActions = inputActions;
         _animationController = animationController;
 
         InitializeMovement();
@@ -74,27 +72,17 @@ public class PlayerMovementController
         _groundedRadius = 0.28f;
     }
 
-    public void HandleMovement()
-    {
-        // 이동 처리
-        ProcessMovement();
 
-        // 점프 처리
-        ProcessJump();
-        
-        // 앉기 처리
-        ProcessSit();
-    }
-
-    private void ProcessMovement()
+    // 플레이어의 이동을 처리하는 함수
+    public void HandleMovement(Vector2 inputDirection, bool isSprinting )
     {
         // 이동 속도 결정
-        _targetSpeed = _inputActions.sprint ? _runSpeed : _walkSpeed;
-        if(_inputActions.move == Vector2.zero) _targetSpeed = 0.0f;
+        _targetSpeed = isSprinting ? _runSpeed : _walkSpeed;
+        if(inputDirection == Vector2.zero) _targetSpeed = 0.0f;
 
         // 이동 방향 계산
-        _moveDirection.x = _inputActions.move.x;
-        _moveDirection.z = _inputActions.move.y;
+        _moveDirection.x = inputDirection.x;
+        _moveDirection.z = inputDirection.y;
         _moveDirection = _characterController.transform.TransformDirection(_moveDirection).normalized;
 
         // 현재 수평 속도 계산 (velocity 대신 이동 방향과 속도 사용)
@@ -133,7 +121,7 @@ public class PlayerMovementController
         _animationController.SetAnimationFloat(AnimatorParameters.Speed, _animationBlend);
     }
 
-    private void ProcessJump()
+    public void HandleJump(bool isJump)
     {
         if(_isGrounded)
         {
@@ -142,9 +130,9 @@ public class PlayerMovementController
 
             _animationController.SetAnimationBool(AnimatorParameters.IsJumping, false); // 점프 애니메이션 종료
 
-            if(_inputActions.jump && _jumpTimeout <= 0.0f)
+            if(isJump && _jumpTimeout <= 0.0f)
             {
-                // 점프 시작
+                // 점프 (점프 높이 * 중력 * 보정 값)
                 _verticalVelocity = Mathf.Sqrt(_jumpHeight * -2.0f * _gravity);
                 _animationController.SetAnimationBool(AnimatorParameters.IsJumping, true);  // 점프 애니메이션 시작
             }
@@ -175,15 +163,16 @@ public class PlayerMovementController
         }
 
         // 점프 후 캐릭터 이동
-        _characterController.Move(new Vector3(0, _verticalVelocity, 0) * Time.deltaTime);
+        _verticalMovement.Set(0, _verticalVelocity, 0);
+        _characterController.Move(_verticalMovement * Time.deltaTime);
     }
 
     /// <summary>
     /// 캐릭터가 땅에 붙어 있는지 여부를 체크하는 함수
     /// </summary>
-    /// <param name="groundCheckPosition"></param>
-    /// <param name="groundCheckRadius"></param>
-    /// <param name="groundLayers"></param>
+    /// <param name="groundCheckPosition">캐릭터의 땅 체크 위치</param>
+    /// <param name="groundCheckRadius">땅 체크 반지름</param>
+    /// <param name="groundLayers">땅여부 확인 Layer</param>
     public void UpdateGroundedStatus(Vector3 groundCheckPosition, LayerMask groundLayers)
     {
         // 땅에 붙어 있는지 여부를 체크
@@ -194,12 +183,11 @@ public class PlayerMovementController
     }
     
     // 앉기 처리    
-    private void ProcessSit(){
-        if(_inputActions.isSit){
-            _animationController.SetAnimationBool(AnimatorParameters.IsSitting, true);
-        }else{
-            _animationController.SetAnimationBool(AnimatorParameters.IsSitting, false);
-        }
+    public void HandleSit(bool isSit){
+        // 추후 이동속도 감소 등 추가 가능
+
+
+        _animationController.SetAnimationBool(AnimatorParameters.IsSitting, isSit);
     }
 
 }   

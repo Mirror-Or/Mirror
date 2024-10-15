@@ -68,19 +68,31 @@ public class PlayerStateController : MonoBehaviour
             _playerChestTR = _FPSAnimator.GetBoneTransform(HumanBodyBones.UpperChest);
         }
 
-        _animationController = new PlayerAnimationController(_FPSAnimator, _3stAnimator);
-        _movementController = new PlayerMovementController(_characterController, _inputActions,_animationController);
+        _animationController = new(_FPSAnimator, _3stAnimator);
+        _movementController = new(_characterController,_animationController);
     }
 
     private void Update()
     {
-        _movementController.HandleMovement();
+        // 입력에 따라 이동 명령 전달
+        _movementController.HandleMovement(_inputActions.move, _inputActions.sprint);
+
+        if(_inputActions.jump){
+            _movementController.HandleJump(true);
+        }else{
+            _movementController.HandleJump(false);
+        }
+
+        if(_inputActions.isSit){
+            _movementController.HandleSit(true);
+        }else{
+            _movementController.HandleSit(false);
+        }
 
         UseItem();
         InteractionObject();
         TransferItem();
         ShowInventory();
-        OnFire();
         ShowQuickSlot();
 
         SetSelectItem();
@@ -318,39 +330,7 @@ public class PlayerStateController : MonoBehaviour
             }
         }
     }
-    
-    /// <summary>
-    /// 앉기 처리
-    /// </summary>
-    private void OnSit()
-    {
-        if(_inputActions.isSit){
-            
-            if(!_isSitVisible){
-                _isSitVisible = true;
 
-                if (_hasFPSAnimator)
-                {
-                    _FPSAnimator.SetBool(_animIDSit, true);
-                }
-
-                if(_has3stAnimator){
-                    _3stAnimator.SetBool(_animIDSit, true);
-                }
-            }
-        }else{
-            _isSitVisible = false;
-
-            if (_hasFPSAnimator)
-            {
-                _FPSAnimator.SetBool(_animIDSit, false);
-            }
-
-            if(_has3stAnimator){
-                _3stAnimator.SetBool(_animIDSit, false);
-            }
-        }
-    }
 
     /// <summary>
     /// 일정 시간이 지난 후 공격 애니메이션을 종료하고 원래 상태로 복귀
