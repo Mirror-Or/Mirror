@@ -1588,6 +1588,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 973389783226494046}
+  - component: {fileID: 8381364390017819724}
+  - component: {fileID: 2884946799811984687}
+  - component: {fileID: 5657792335046636216}
   m_Layer: 0
   m_Name: MainPlayer
   m_TagString: Untagged
@@ -1612,6 +1615,61 @@ Transform:
   - {fileID: 4637091804663054096}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!143 &8381364390017819724
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 108211995091141028}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Height: 1.8
+  m_Radius: 0.22
+  m_SlopeLimit: 45
+  m_StepOffset: 0.35
+  m_SkinWidth: 0.01
+  m_MinMoveDistance: 0
+  m_Center: {x: 0, y: 0.93, z: 0}
+--- !u!114 &2884946799811984687
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 108211995091141028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3d3430142d10bc42982124cbadbb68a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _FPSAnimator: {fileID: 5866666021909216657}
+  _3stAnimator: {fileID: 342469546014807951}
+  _groundLayers:
+    serializedVersion: 2
+    m_Bits: 1
+--- !u!114 &5657792335046636216
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 108211995091141028}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31980fab592f1ce46836687e20f71a56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &170017581873631248
 GameObject:
   m_ObjectHideFlags: 0
@@ -2152,9 +2210,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1857404554474737463}
-  - component: {fileID: 3601257452719291567}
-  - component: {fileID: 142682441589214867}
-  - component: {fileID: 5275518140063869992}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -2179,62 +2234,6 @@ Transform:
   - {fileID: 7875077032756098800}
   m_Father: {fileID: 973389783226494046}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!143 &3601257452719291567
-CharacterController:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 876380514712915070}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Height: 1.8
-  m_Radius: 0.22
-  m_SlopeLimit: 45
-  m_StepOffset: 0.35
-  m_SkinWidth: 0.01
-  m_MinMoveDistance: 0
-  m_Center: {x: 0, y: 0.93, z: 0}
---- !u!114 &142682441589214867
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 876380514712915070}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d3d3430142d10bc42982124cbadbb68a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _FPSAnimator: {fileID: 5866666021909216657}
-  _3stAnimator: {fileID: 342469546014807951}
-  _groundLayers:
-    serializedVersion: 2
-    m_Bits: 1
-  _playerCamera: {fileID: 2032839582269894093}
---- !u!114 &5275518140063869992
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 876380514712915070}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31980fab592f1ce46836687e20f71a56, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &911400125258933885
 GameObject:
   m_ObjectHideFlags: 0
@@ -2353,7 +2352,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: a3194b8bbc96ef84fab1f98f4b7dae3e, type: 3}
   footstepAudioVolume: 0.5
   attackAudioClip: {fileID: 8300000, guid: 685dfa1b1c7ddb94eb826a19f58ba886, type: 3}
-  _characterController: {fileID: 3601257452719291567}
+  _characterController: {fileID: 0}
 --- !u!1 &999311931731255588
 GameObject:
   m_ObjectHideFlags: 0
