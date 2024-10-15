@@ -125,10 +125,10 @@ public class PlayerMovementController
         _animationBlend = Mathf.Lerp(_animationBlend, targetSpeed, Time.deltaTime * speedChangeRate);
 
         // AnimationController에 애니메이션 정보를 전달
-        _animationController.SetAnimationFloat("Speed", _animationBlend);
+        _animationController.SetAnimationFloat(AnimatorParameters.Speed, _animationBlend);
 
         _motionSpeed = _inputActions.analogMovement ? _inputActions.move.magnitude : 1f;
-        _animationController.SetAnimationFloat("MotionSpeed", _motionSpeed);
+        _animationController.SetAnimationFloat(AnimatorParameters.MotionSpeed, _motionSpeed);
     }
 
     private void HandleJump()
@@ -138,13 +138,13 @@ public class PlayerMovementController
             // 땅에 붙어 있는 경우 점프 애니메이션 및 속도 초기화
             _fallTimeout = 0.15f;
 
-            _animationController.SetAnimationBool("Jump", false); // 점프 애니메이션 종료
+            _animationController.SetAnimationBool(AnimatorParameters.IsJumping, false); // 점프 애니메이션 종료
 
             if(_inputActions.jump && _jumpTimeout <= 0.0f)
             {
                 // 점프 시작
                 _verticalVelocity = Mathf.Sqrt(_jumpHeight * -2.0f * _gravity);
-                _animationController.SetAnimationBool("Jump", true);  // 점프 애니메이션 시작
+                _animationController.SetAnimationBool(AnimatorParameters.IsJumping, true);  // 점프 애니메이션 시작
             }
 
             // 점프 타임아웃 처리
@@ -163,7 +163,7 @@ public class PlayerMovementController
                 _fallTimeout -= Time.deltaTime;
             }
 
-            _animationController.SetAnimationBool("Jump", false);  // 공중 애니메이션 처리
+            _animationController.SetAnimationBool(AnimatorParameters.IsJumping, false);  // 공중 애니메이션 처리
         }
 
         // 중력과 수직 속도 처리
@@ -188,7 +188,7 @@ public class PlayerMovementController
         _isCharacterGrounded = Physics.CheckSphere(groundCheckPosition, _groundedRadius, groundLayers, QueryTriggerInteraction.Ignore);
 
         // 애니메이션에 grounded 상태 반영
-        _animationController.SetAnimationBool("Grounded", _isCharacterGrounded);
+        _animationController.SetAnimationBool(AnimatorParameters.IsGrounded, _isCharacterGrounded);
     }
     
 

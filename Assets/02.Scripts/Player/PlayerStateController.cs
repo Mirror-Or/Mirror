@@ -109,8 +109,8 @@ public class PlayerStateController : MonoBehaviour
     /// </summary>
     private void AssignAnimationIDs()
     {
-        _animIDAttack = AnimationConstants.AnimIDAttack;
-        _animIDSit = AnimationConstants.AnimIDSit;
+        _animIDAttack = AnimatorParameters.AnimIDAttack;
+        _animIDSit = AnimatorParameters.AnimIDSit;
     }
 
 
