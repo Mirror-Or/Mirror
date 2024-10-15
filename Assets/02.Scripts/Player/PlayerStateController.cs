@@ -143,6 +143,7 @@ public class PlayerStateController : MonoBehaviour
         if (_inputActions.isInteractable)
         {
             _interactionController.HandleInteraction();
+            _inputActions.isInteractable = false;
         }
     }
 

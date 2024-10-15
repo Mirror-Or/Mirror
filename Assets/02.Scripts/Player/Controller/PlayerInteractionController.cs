@@ -12,6 +12,7 @@ public class PlayerInteractionController : MonoBehaviour
 
     // 감지된 오브젝트
     private GameObject detectedObject;
+    private IInventoryItem _inventoryItem;
 
     public PlayerInteractionController(PlayerObjectDetectedController detectedController){
         _objectDetectedController = detectedController;
@@ -24,15 +25,15 @@ public class PlayerInteractionController : MonoBehaviour
 
         // @todo: 추후 상호작용 가능한 오브젝트를 구분하는 로직 추가
         // ex) Item 습득, 문 열기, 벨브 열기 등
-        IInventoryItem inventoryItem = detectedObject.GetComponent<IInventoryItem>();
-        if(inventoryItem.IsPickable == false) {
+        _inventoryItem = detectedObject.GetComponent<IInventoryItem>();
+        if(!_inventoryItem.IsPickable) {
             Debug.Log("획득할 수 없는 아이템입니다.");
             return;
         }
 
         // 아이템 획득
         detectedObject.SetActive(false);
-        inventoryItem.IsActive = false; 
+        _inventoryItem.IsActive = false; 
 
         // 추후 인벤토리에 추가 로직 구현 필요
 
