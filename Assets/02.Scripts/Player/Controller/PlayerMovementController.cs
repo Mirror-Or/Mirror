@@ -26,6 +26,7 @@ public class PlayerMovementController
     // 점프 관련 변수
     private bool _isGrounded;                // 캐릭터가 땅에 붙어 있는지 여부
     private float _verticalVelocity;         // 수직 속도 (점프 및 낙하 시 속도)
+    private Vector3 _verticalMovement;       // 수직 이동 방향
     private float _gravity;                  // 중력 값
     private float _jumpTimeout;              // 점프 후 재점프 가능 시간 (딜레이)
     private float _fallTimeout;              // 낙하 시 발생하는 딜레이 시간
@@ -63,6 +64,7 @@ public class PlayerMovementController
         // 점프 관련 변수 초기화
         _isGrounded = false;
         _verticalVelocity = 0.0f;
+        _verticalMovement = Vector3.zero;
         _gravity = -9.81f;
         _jumpTimeout = 0.0f;
         _fallTimeout = 0.0f;
@@ -113,13 +115,14 @@ public class PlayerMovementController
         // 캐릭터 이동 처리
         if(_currentSpeed > 0 || Mathf.Abs(_verticalVelocity) > 0)
         {
-            _characterController.Move(_moveDirection * (_currentSpeed * Time.deltaTime) + new Vector3(0, _verticalVelocity, 0) * Time.deltaTime);
+            // verticalMovement 재사용
+            _verticalMovement.Set(0, _verticalVelocity, 0);
+            _characterController.Move(_moveDirection * (_currentSpeed * Time.deltaTime) + _verticalMovement * Time.deltaTime);
         }
 
+        // 애니메이션 처리
         HandleMovementAnimation(_currentSpeed, _speedChangeRate);
     }
-
-    
 
     private void HandleMovementAnimation(float targetSpeed, float speedChangeRate)
     {
