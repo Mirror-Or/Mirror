@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Serialization;
 
 [RequireComponent(typeof(LineRenderer))]
 public class LazerMon : MonoBehaviour
@@ -7,24 +6,27 @@ public class LazerMon : MonoBehaviour
     [SerializeField] private float defaultLength = 50;        // 레이저의 길이
     [SerializeField] private float reflectNum = 20;           // 반사 가능 횟수
 
+    private LayerMask _clearLayer = LayerMask.NameToLayer("Clear");
+    private LayerMask _reflectLayer = LayerMask.NameToLayer("Reflect");
+    
     private LineRenderer _lineRenderer;      // 레이저 표시용 LineRenderer 변수
     private RaycastHit _hit;               // 오브젝트 충돌 체크용 Raycast 변수
     
     
-    void Start()
+    private void Start()
     {
         // LineRenderer 컴포넌트 받아옴
         _lineRenderer = GetComponent<LineRenderer>();   
     }
 
-    void Update()
+    private void Update()
     {
         // 레이저 반사 함수 실행
         ReflectLazer(); 
     }
     
     // 레이저 반사 함수
-    void ReflectLazer()
+    private void ReflectLazer()
     {
         // Ray를 생성
         var ray = new Ray(transform.position, transform.forward);
@@ -46,13 +48,12 @@ public class LazerMon : MonoBehaviour
             {
                 LayerMask layer = _hit.transform.gameObject.layer;
                 
-                if (layer == LayerMask.NameToLayer("Reflect"))
+                if (layer == _reflectLayer)
                 {
-                    Debug.Log("반사");
                     // ray를 충돌 지점에서 반사각만큼 회전한 방향으로 재생성
                     ray = new Ray(_hit.point, Vector3.Reflect(ray.direction, _hit.normal));
                 }
-                else if (layer== LayerMask.NameToLayer("Clear"))
+                else if (layer== _clearLayer)
                 {
                     ClearEvent();
                 }

@@ -42,10 +42,9 @@ public class AudioMixerPuzzle : RaycastCheck, IInteractionable
     {
         // 좌클릭을 눌렀을 때
         if(Input.GetMouseButtonDown(0)){
-            // 버튼의 수만큼 반복
-            if(button.Find(n => n.transform == RayHitCheck(Input.mousePosition, myCam)))
+            _nowDragButton = button.FindIndex(n => n.transform == RayHitCheck(Input.mousePosition, myCam));
+            if(_nowDragButton != -1)
             {
-                _nowDragButton = button.FindIndex(n => n.transform == RayHitCheck(Input.mousePosition, myCam));
                 _isDrag = true;
             }
         }
