@@ -33,18 +33,32 @@ public class PlayerAnimationController
         _thirdPersonAnimator = thirdPersonAnimator;
     }
     
+        /// <summary>
+        /// 애니메이션 float 값을 설정하는 함수
+        /// </summary>
+        /// <param name="parameter">파라미터 명</param>
+        /// <param name="value">float value</param>
     public void SetAnimationFloat(string parameter, float value)
     {
         _fpsAnimator?.SetFloat(parameter, value);
         _thirdPersonAnimator?.SetFloat(parameter, value);
     }
 
+    /// <summary>
+    /// 애니메이션 bool 값을 설정하는 함수
+    /// </summary>
+    /// <param name="parameter">파라미터 명</param>
+    /// <param name="value">bool value</param>
     public void SetAnimationBool(string parameter, bool value)
     {
         _fpsAnimator?.SetBool(parameter, value);
         _thirdPersonAnimator?.SetBool(parameter, value);
     }
 
+    /// <summary>
+    /// 애니메이션 트리거를 실행하는 함수
+    /// </summary>
+    /// <param name="parameter">파라미터명</param>
     public void TriggerAnimation(string parameter)
     {
         _fpsAnimator?.SetTrigger(parameter);

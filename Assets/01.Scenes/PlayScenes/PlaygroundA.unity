@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.0017662554, g: 0.0012486916, b: 0.0009820104, a: 1}
+  m_IndirectSpecularColor: {r: 0.0017662991, g: 0.0012487444, b: 0.0009821026, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1746,6 +1746,91 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &747422959
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -1227397339049451055, guid: 2ecdf69d785cec045a11f34049bdc3c1, type: 3}
+      propertyPath: itemData.name
+      value: "\uC544\uB370\uCE74\uC194"
+      objectReference: {fileID: 0}
+    - target: {fileID: -1227397339049451055, guid: 2ecdf69d785cec045a11f34049bdc3c1, type: 3}
+      propertyPath: itemData.type
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -1227397339049451055, guid: 2ecdf69d785cec045a11f34049bdc3c1, type: 3}
+      propertyPath: itemData.iconPath
+      value: Items/Sprite/Ammo9mm
+      objectReference: {fileID: 0}
+    - target: {fileID: -1227397339049451055, guid: 2ecdf69d785cec045a11f34049bdc3c1, type: 3}
+      propertyPath: itemData.invenSpace
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -1227397339049451055, guid: 2ecdf69d785cec045a11f34049bdc3c1, type: 3}
+      propertyPath: itemData.description
+      value: "\uC0C8\uC0B4\uC774 \uC194\uC194~ \uC544\uB370\uCE74\uC194!"
+      objectReference: {fileID: 0}
+    - target: {fileID: -1227397339049451055, guid: 2ecdf69d785cec045a11f34049bdc3c1, type: 3}
+      propertyPath: itemData.inventoryIndex
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: -1227397339049451055, guid: 2ecdf69d785cec045a11f34049bdc3c1, type: 3}
+      propertyPath: itemData.quickSlotIndex
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4861262936278299186, guid: 2ecdf69d785cec045a11f34049bdc3c1, type: 3}
+      propertyPath: m_Name
+      value: P-0034 legenol
+      objectReference: {fileID: 0}
+    - target: {fileID: 5205453422887938184, guid: 2ecdf69d785cec045a11f34049bdc3c1, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5205453422887938184, guid: 2ecdf69d785cec045a11f34049bdc3c1, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 3.37
+      objectReference: {fileID: 0}
+    - target: {fileID: 5205453422887938184, guid: 2ecdf69d785cec045a11f34049bdc3c1, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 6.719
+      objectReference: {fileID: 0}
+    - target: {fileID: 5205453422887938184, guid: 2ecdf69d785cec045a11f34049bdc3c1, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5205453422887938184, guid: 2ecdf69d785cec045a11f34049bdc3c1, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5205453422887938184, guid: 2ecdf69d785cec045a11f34049bdc3c1, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5205453422887938184, guid: 2ecdf69d785cec045a11f34049bdc3c1, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5205453422887938184, guid: 2ecdf69d785cec045a11f34049bdc3c1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5205453422887938184, guid: 2ecdf69d785cec045a11f34049bdc3c1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5205453422887938184, guid: 2ecdf69d785cec045a11f34049bdc3c1, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 2ecdf69d785cec045a11f34049bdc3c1, type: 3}
 --- !u!1 &818021983
 GameObject:
   m_ObjectHideFlags: 0
@@ -2985,3 +3070,4 @@ SceneRoots:
   - {fileID: 1570816768}
   - {fileID: 299148520}
   - {fileID: 670936349}
+  - {fileID: 747422959}
