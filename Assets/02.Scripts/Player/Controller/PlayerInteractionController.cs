@@ -14,6 +14,8 @@ public class PlayerInteractionController : MonoBehaviour
     private GameObject detectedObject;
     private IInventoryItem _inventoryItem;
 
+    private IInteractable _interactable;
+
     public PlayerInteractionController(PlayerObjectDetectedController detectedController){
         _objectDetectedController = detectedController;
     }
@@ -23,23 +25,26 @@ public class PlayerInteractionController : MonoBehaviour
 
         if(detectedObject == null) return;
 
-        // @todo: 추후 상호작용 가능한 오브젝트를 구분하는 로직 추가
-        // ex) Item 습득, 문 열기, 벨브 열기 등
-        _inventoryItem = detectedObject.GetComponent<IInventoryItem>();
-        if(!_inventoryItem.IsPickable) {
-            Debug.Log("획득할 수 없는 아이템입니다.");
-            return;
-        }
+        _interactable = detectedObject.GetComponent<IInteractable>();
+        _interactable?.Interact();
 
-        // 아이템 획득
-        detectedObject.SetActive(false);
-        _inventoryItem.IsActive = false; 
+        // // @todo: 추후 상호작용 가능한 오브젝트를 구분하는 로직 추가
+        // // ex) Item 습득, 문 열기, 벨브 열기 등
+        // _inventoryItem = detectedObject.GetComponent<IInventoryItem>();
+        // if(!_inventoryItem.IsPickable) {
+        //     Debug.Log("획득할 수 없는 아이템입니다.");
+        //     return;
+        // }
 
-        // 추후 인벤토리에 추가 로직 구현 필요
+        // // 아이템 획득
+        // detectedObject.SetActive(false);
+        // _inventoryItem.IsActive = false; 
 
-        // 추후 아이템 획득 사운드 재생
+        // // 추후 인벤토리에 추가 로직 구현 필요
 
-        Debug.Log("아이템 획득 완료");
+        // // 추후 아이템 획득 사운드 재생
+
+        // Debug.Log("아이템 획득 완료");
 
     }
 
