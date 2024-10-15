@@ -16,14 +16,14 @@ public enum StatusType
 public class PlayerBasicSettings
 {
     // Player Maximum Settings
-    public static readonly float maxHealth = 100.0f;
-    public static readonly float maxMental = 100.0f;
+    public static readonly float maxHealth = 100.0f;        // 플레이어의 최대 체력
+    public static readonly float maxMental = 100.0f;        // 플레이어의 최대 스태미나
 
     // Player Movement Settings
-    public static readonly float walkSpeed = 2.0f;
-    public static readonly float runSpeed = 4.0f;
-    public static readonly float speedChangeRate = 10.0f;
-    public static readonly float jumpHeight = 1.0f;
+    public static readonly float walkSpeed = 2.0f;          // 걷기 속도
+    public static readonly float runSpeed = 4.0f;           // 달리기 속도
+    public static readonly float speedChangeRate = 10.0f;   // 이동 속도 변경 비율
+    public static readonly float jumpHeight = 0.5f;         // 점프 높이
 
     // Player Attack Settings
     public static readonly float attackRange = 1.5f;
