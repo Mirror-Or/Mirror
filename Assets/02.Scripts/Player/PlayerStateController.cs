@@ -98,7 +98,7 @@ public class PlayerStateController : MonoBehaviour
         // ShowQuickSlot();
         // SetSelectItem();
 
-        _attackTimeoutDelta += Time.deltaTime;  // 공격 타임아웃 델타 증가
+        // _attackTimeoutDelta += Time.deltaTime;  // 공격 타임아웃 델타 증가
     }
 
     private void LateUpdate()
@@ -184,16 +184,18 @@ public class PlayerStateController : MonoBehaviour
     // 공격 처리
     private void OnAttack()
     {
-        if(_inputActions.isFire)
+        if (_inputActions.isFire)
         {
-            Debug.Log($"{_attackTimeoutDelta} / {PlayerBasicSettings.attackDelay}");
-
-            if(_attackTimeoutDelta > PlayerBasicSettings.attackDelay){
+            if (_attackTimeoutDelta <= 0.0f)
+            {
                 _combatController.PerformAttack(transform.position, LayerMask.GetMask("Enemy"));
-                _attackTimeoutDelta = 0.0f; // 공격 타임아웃 초기화
-            }else{
-                Debug.Log("공격 딜레이 중");
+                _attackTimeoutDelta = PlayerBasicSettings.attackDelay; // 공격 딜레이 설정
             }
+        }
+
+        if (_attackTimeoutDelta > 0.0f)
+        {
+            _attackTimeoutDelta -= Time.deltaTime; // 공격 딜레이 타이머 감소
         }
     }
 

@@ -2352,7 +2352,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: a3194b8bbc96ef84fab1f98f4b7dae3e, type: 3}
   footstepAudioVolume: 0.5
   attackAudioClip: {fileID: 8300000, guid: 685dfa1b1c7ddb94eb826a19f58ba886, type: 3}
-  _characterController: {fileID: 0}
+  _characterController: {fileID: 8381364390017819724}
 --- !u!1 &999311931731255588
 GameObject:
   m_ObjectHideFlags: 0
