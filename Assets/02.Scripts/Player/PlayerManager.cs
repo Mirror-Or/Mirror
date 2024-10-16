@@ -58,7 +58,6 @@ public class PlayerManager :  IManager, IDamage
 		return _playerStatus;
 	}	
 
-	// ReSharper disable Unity.PerformanceAnalysis
 	public void TakeDamage(int hitPower)
     {
         if(_playerStatus.CurrentHealth <= 0) return;  // 이미 사망한 경우 데미지를 받지 않음

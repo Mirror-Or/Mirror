@@ -5,7 +5,7 @@ using UnityEngine;
 /// <summary>
 /// 플레이어의 상호작용을 담당하는 클래스
 /// </summary>
-public class PlayerInteractionController : MonoBehaviour
+public class PlayerInteractionController
 {   
     // 필요 컴포넌트 및 클래스
     private PlayerObjectDetectedController _objectDetectedController; // 감지한 오브젝트를 처리하는 컨트롤러

@@ -6,6 +6,9 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Reflection;
 
+/// <summary>
+///  입력 관리 클래스
+/// </summary>
 public class InputManager : IManager
 {
     private InputActionAsset inputAction;                       // InputActionAsset
@@ -126,7 +129,7 @@ public class InputManager : IManager
             Debug.LogError($"{mapName}의 ActionMap을 찾을 수 없습니다.");
             return;
         }
-        
+
         var map = actionMaps[mapName];
         if (map != null)
         {

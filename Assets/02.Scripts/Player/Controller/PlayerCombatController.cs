@@ -5,7 +5,7 @@ using UnityEngine;
 /// <summary>
 /// 플레이어의 전투를 담당하는 클래스
 /// </summary>
-public class PlayerCombatController : MonoBehaviour
+public class PlayerCombatController
 {
     private PlayerStatus _playerStatus;
     private PlayerAnimationController _playerAnimationController;

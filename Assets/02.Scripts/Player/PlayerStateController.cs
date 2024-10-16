@@ -5,7 +5,7 @@ using System;
 using Utils;
 
 /// <summary>
-/// 플레이어의 상태(이동, 점프, 달리기등)에 대한 로직을 담당하는 클래스
+/// 플레이어의 키 입력에 따른 비즈니스 로직을 담당하는 클래스
 /// </summary>
 public class PlayerStateController : MonoBehaviour
 {
