@@ -15,15 +15,9 @@ public class PlayerStateController : MonoBehaviour
     // 공격 세팅
     private float _attackTimeoutDelta = 0.0f;     // 공격 타임아웃 델타
 
-
     [Header("Animation Settings")]
-    private bool _hasFPSAnimator;      // 애니메이터가 있는지 여부
-    private bool _has3stAnimator;      // 애니메이터가 있는지 여부
     [SerializeField] private Animator _FPSAnimator;     // 애니메이터 컴포넌트
     [SerializeField] private Animator _3stAnimator;     // 애니메이터 컴포넌트
-
-
-    private bool _isQuickSlotCurrentlyVisible  = false;         // 현재 퀵슬롯 활성화 여부
 
     private CharacterController _characterController;           //  캐릭터 컨트롤러
     private PlayerInputAction _inputActions;                    // 플레이어 입력 액션
@@ -45,29 +39,14 @@ public class PlayerStateController : MonoBehaviour
     private PlayerObjectDetectedController _objectDetectedController;   // 플레이어 오브젝트 감지 컨트롤러
     private readonly float _maxDistance = 10.0f;                        // 오브젝트 감지 최대 거리
 
+    // 케릭터 관련
+    private Vector3 _characterRotationY = Vector3.zero;     // 캐싱된 회전 벡터
+
     private void Awake()
     {
-        _hasFPSAnimator = _FPSAnimator != null;
-        _has3stAnimator = _3stAnimator != null;
-        Debug.Log($"FPS Animator: {_hasFPSAnimator} / 3st Animator: {_has3stAnimator}");
-
-        // animator가 있는 경우, 머리 위치를 가져옴
-        if(_hasFPSAnimator) _playerChestTR = _FPSAnimator.GetBoneTransform(HumanBodyBones.UpperChest);
-        
-        // 컴포넌트 및 클래스 참조
-        _playerCamera = Camera.main;
-        _playerStatus = GameManager.playerManager.GetPlayerStatus();
-        _characterController = GetComponent<CharacterController>();
-        _inputActions = GameManager.inputManager.GetInputActionStrategy("Player") as PlayerInputAction;
-
-        // 컨트롤러 참조
-        _cameraController = new(_playerCamera.gameObject.transform);
-        _objectDetectedController = new(_playerCamera,_maxDistance);
-        _animationController = new(_FPSAnimator, _3stAnimator);
-        _movementController = new(_characterController,_animationController);
-        _interactionController = new(_objectDetectedController);
-        _combatController = new(_animationController, _playerStatus);
-
+        InitializeAnimators();
+        InitializeComponents();
+        InitializeControllers();
     }
 
     private void Update()
@@ -91,14 +70,6 @@ public class PlayerStateController : MonoBehaviour
 
         OnAttack();             // 공격 처리
         InteractionObject();    // 상호작용 오브젝트 처리
-
-        // UseItem();
-        // TransferItem();
-        // ShowInventory();
-        // ShowQuickSlot();
-        // SetSelectItem();
-
-        // _attackTimeoutDelta += Time.deltaTime;  // 공격 타임아웃 델타 증가
     }
 
     private void LateUpdate()
@@ -117,6 +88,42 @@ public class PlayerStateController : MonoBehaviour
     private void FixedUpdate() {
         _movementController.UpdateGroundedStatus(transform.position + Vector3.down * 0.14f, _groundLayers);
     }
+
+    #region Initialization
+    /// <summary>
+    /// 애니메이터 초기화
+    /// </summary>
+    private void InitializeAnimators()
+    {
+        if (_FPSAnimator != null) _playerChestTR = _FPSAnimator.GetBoneTransform(HumanBodyBones.UpperChest);
+    }
+
+    /// <summary>
+    /// 컴포넌트 초기화
+    /// </summary>
+    private void InitializeComponents()
+    {
+        _playerCamera = Camera.main;
+        _playerStatus = GameManager.playerManager.GetPlayerStatus();
+        _characterController = GetComponent<CharacterController>();
+        _inputActions = GameManager.inputManager.GetInputActionStrategy("Player") as PlayerInputAction;
+    }
+
+    /// <summary>
+    /// 컨트롤러 초기화
+    /// </summary>
+    private void InitializeControllers()
+    {
+        _cameraController = new(_playerCamera.gameObject.transform);
+        _objectDetectedController = new(_playerCamera, _maxDistance);
+        _animationController = new(_FPSAnimator, _3stAnimator);
+        _movementController = new(_characterController, _animationController);
+        _interactionController = new(_objectDetectedController);
+        _combatController = new(_animationController, _playerStatus);
+    }
+    #endregion
+
+    #region Rotation
     /// <summary>
     /// 플레이어 회전 처리
     /// </summary>
@@ -129,10 +136,10 @@ public class PlayerStateController : MonoBehaviour
     /// </summary>
     private void CharacterRotation()
     {
-        Vector3 _characterRotationY = new Vector3(0f, _inputActions.look.x, 0f) * _rotationSmoothTime;
+        _characterRotationY.Set(0f, _inputActions.look.x * _rotationSmoothTime, 0f);
         _characterController.transform.Rotate(_characterRotationY);
     }
-
+    #endregion
 
     /// <summary>
     /// 상호작용 오브젝트 처리
@@ -147,6 +154,7 @@ public class PlayerStateController : MonoBehaviour
         }
     }
 
+    // 추후 UI 관련 로직은 별도의 클래스로 분리할 예정
     #region 아이테 사용 및 전달
     private void TransferItem()
     {
@@ -160,7 +168,6 @@ public class PlayerStateController : MonoBehaviour
 
     /// <summary>
     /// 아이템 사용
-    /// @Todo: 추후 로직을 다른 곳으로 이동 시킬지 고민 필요
     /// </summary>
     private void UseItem()
     {
@@ -185,21 +192,18 @@ public class PlayerStateController : MonoBehaviour
     // 공격 처리
     private void OnAttack()
     {
-        if (_inputActions.isFire)
+        if (_inputActions.isFire && _attackTimeoutDelta <= 0.0f)
         {
-            if (_attackTimeoutDelta <= 0.0f)
-            {
-                _combatController.PerformAttack(transform.position, LayerMask.GetMask("Enemy"));
-                _attackTimeoutDelta = PlayerBasicSettings.attackDelay; // 공격 딜레이 설정
-            }
-        }
-
-        if (_attackTimeoutDelta > 0.0f)
-        {
-            _attackTimeoutDelta -= Time.deltaTime; // 공격 딜레이 타이머 감소
+            _combatController.PerformAttack(transform.position, LayerMask.GetMask("Enemy"));
+            StartCoroutine(AttackDelay());
         }
     }
 
+    private IEnumerator AttackDelay()
+    {
+        _attackTimeoutDelta = PlayerBasicSettings.attackDelay;
+        yield return new WaitForSeconds(_attackTimeoutDelta);
+        _attackTimeoutDelta = 0.0f;
+    }
+
 }
-
-
