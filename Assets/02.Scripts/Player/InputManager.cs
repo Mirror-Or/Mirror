@@ -13,53 +13,54 @@ public class InputManager : IManager
     private InputActionMap currentActionMap;                    // 현재 활성화된 ActionMap
 
     private Dictionary<string, IInputActionStrategy> _inputStrategies; // 바인딩된 InputAction을 저장할 딕셔너리
-    
+
     // IManager 인터페이스 구현
     public void Initialize(string sceneName)
     {
         InitInputAction();
 
-        if(sceneName == SceneConstants.StartScene){
-            InitInputAction();
-        }else if(sceneName == SceneConstants.PlaygroundA){
+        if (sceneName == SceneConstants.PlaygroundA || sceneName == SceneConstants.PlaygroundB)
+        {
             SwitchActionMap("Player");
-        }else if(sceneName == SceneConstants.PlaygroundB){
-            SwitchActionMap("Player");
+        }
+        else if (sceneName == SceneConstants.StartScene)
+        {
+            SwitchActionMap("AnyKey");
         }
     }
 
     /// <summary>
     /// InputAction을 초기화
     /// </summary>
-    private void InitInputAction(){
-        // inputAction = Resources.Load<InputActionAsset>("Input/PlayerInputActions");
-            inputAction = GameManager.resourceManager.LoadResource<InputActionAsset>("Input/PlayerInputActions");
+    private void InitInputAction()
+    {
+        inputAction = GameManager.resourceManager.LoadResource<InputActionAsset>("Input/PlayerInputActions");
 
 
-            if (!inputAction)
-            {
-                throw new NullReferenceException("InputActionAsset이 할당되지 않았습니다.");
-            }
+        if (!inputAction)
+        {
+            throw new NullReferenceException("InputActionAsset이 할당되지 않았습니다.");
+        }
 
-            inputAction.Enable(); // 모든 액션 맵을 활성화
+        inputAction.Enable(); // 모든 액션 맵을 활성화
 
-            // 딕셔너리 초기화
-            actionMaps = new Dictionary<string, InputActionMap>();
-            _inputStrategies = new Dictionary<string, IInputActionStrategy>();
+        // 딕셔너리 초기화
+        actionMaps = new Dictionary<string, InputActionMap>();
+        _inputStrategies = new Dictionary<string, IInputActionStrategy>();
 
-            // 모든 ActionMap을 딕셔너리에 추가
-            foreach (var map in inputAction.actionMaps)
-            {
-                actionMaps.Add(map.name, map);
-            }
+        // 모든 ActionMap을 딕셔너리에 추가
+        foreach (var map in inputAction.actionMaps)
+        {
+            actionMaps.Add(map.name, map);
+        }
 
-            // InputACtion 초기화하고 저장
-            _inputStrategies.Add("Player", new PlayerInputAction());
-            _inputStrategies.Add("Dialog", new DialogueInputAction());
-            _inputStrategies.Add("AnyKey", new AnyKeyInputAction()); 
+        // InputACtion 초기화하고 저장
+        _inputStrategies.Add("Player", new PlayerInputAction());
+        _inputStrategies.Add("Dialog", new DialogueInputAction());
+        _inputStrategies.Add("AnyKey", new AnyKeyInputAction());
 
-            // 초기 상태로 AnyKey ActionMap 활성화
-            SwitchActionMap("AnyKey");
+        // 초기 상태로 AnyKey ActionMap 활성화
+        SwitchActionMap("AnyKey");
     }
 
     /// <summary>
@@ -77,10 +78,16 @@ public class InputManager : IManager
         // 기존 액션 맵이 존재하면 비활성화
         currentActionMap?.Disable();
 
+        if (actionMaps == null || !actionMaps.ContainsKey(mapName))
+        {
+            Debug.LogError($"{mapName}의 ActionMap을 찾을 수 없습니다.");
+            return;
+        }
+
         // 해당 이름의 액션 맵을 활성화
-        var map = actionMaps[mapName];  
-        map.Enable();                   
-        currentActionMap = map;         
+        var map = actionMaps[mapName];
+        map.Enable();
+        currentActionMap = map;
 
         var strategy = _inputStrategies[mapName];
         strategy.BindInputActions(map);
@@ -114,6 +121,12 @@ public class InputManager : IManager
     /// <param name="target"></param>
     public void BindAllActions(string mapName, object target)
     {
+        if (!actionMaps.ContainsKey(mapName))
+        {
+            Debug.LogError($"{mapName}의 ActionMap을 찾을 수 없습니다.");
+            return;
+        }
+        
         var map = actionMaps[mapName];
         if (map != null)
         {

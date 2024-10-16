@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+/// <summary>
+/// 플레이어 애니메이션 이벤트 핸들러
+/// </summary>
 public class PlayerAnimationEventHandler : MonoBehaviour
 {
     [Header("Audio Settings")]
@@ -18,13 +22,17 @@ public class PlayerAnimationEventHandler : MonoBehaviour
     /// </summary>
     public void OnFootstep(AnimationEvent animationEvent)
     {
-        Debug.Log("Footstep event triggered");
-        if (animationEvent.animatorClipInfo.weight > 0.5f)
+        if (animationEvent.animatorClipInfo.weight > 0.5f && footstepAudioClips.Length > 0)
         {
-            if (footstepAudioClips.Length > 0)
+            var index = Random.Range(0, footstepAudioClips.Length);
+            var clip = footstepAudioClips[index];
+            if (clip != null)
             {
-                var index = Random.Range(0, footstepAudioClips.Length);
-                GameManager.audioManager.PlaySoundEffect(footstepAudioClips[index], transform.TransformPoint(_characterController.center), footstepAudioVolume);
+                GameManager.audioManager.PlaySoundEffect(clip, transform.TransformPoint(_characterController.center), footstepAudioVolume);
+            }
+            else
+            {
+                Debug.LogWarning("걷기 사운드 클립이 없습니다.");
             }
         }
     }
@@ -35,9 +43,11 @@ public class PlayerAnimationEventHandler : MonoBehaviour
     /// <param name="animationEvent"></param>
     public void OnLand(AnimationEvent animationEvent)
     {
-        if (animationEvent.animatorClipInfo.weight > 0.5f)
+        if (animationEvent.animatorClipInfo.weight > 0.5f && landingAudioClip != null)
         {
             GameManager.audioManager.PlaySoundEffect(landingAudioClip, transform.TransformPoint(_characterController.center), footstepAudioVolume);
+        }else{
+            Debug.Log("착지 사운드 클립이 없습니다.");
         }
     }
     #endregion
