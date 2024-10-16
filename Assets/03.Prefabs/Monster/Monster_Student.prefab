@@ -123,26 +123,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52fe051a9634e4fbd9d01f507faedbb8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  StartPosition: {x: 0, y: 0, z: 0}
   monsterHp: 20
   attackDistance: 2
   moveSpeed: 3
   attackDelay: 2
   attackPower: 5
-  isMovingMonster: 1
-  moveDirectionList:
-  - {x: -15.45, y: 8.2, z: 21}
-  - {x: -15.45, y: 8.2, z: -10}
-  - {x: -23, y: 8.2, z: -7}
-  - {x: -15.45, y: 8.2, z: -3.5}
-  - {x: 15.5, y: 8.2, z: -3.5}
-  - {x: 15.5, y: 8.2, z: 21}
-  moveDirectionDelayList: []
-  DebugMode: 0
-  ViewAngle: 106
-  ViewRadius: 4
-  TargetMask:
+  IsMovingMonster: 1
+  MoveDirectionList: []
+  MoveDirectionDelayList: []
+  debugMode: 0
+  viewAngle: 120
+  viewRadius: 2
+  targetMask:
     serializedVersion: 2
-    m_Bits: 264
+    m_Bits: 8
   movePositionGroup: {fileID: 0}
 --- !u!54 &6298842902321010137
 Rigidbody:

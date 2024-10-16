@@ -8,20 +8,16 @@ using Random = UnityEngine.Random;
 
 public class MonsterMirror : MonsterFSM
 {
-    [SerializeField]
-    private GameObject mirror;                                           // 공격 후 부서질 거울 오브젝트
-    [SerializeField]
-    private bool isMirrorAttacked = false;                               // 거울이 부서졌는지 여부
-    [SerializeField]
-    private float dashDistance = 5f;                                     // 돌진 거리
-    [SerializeField]
-    private float dashDuration = 0.5f;                                   // 돌진 시간
+    [SerializeField] private GameObject mirror;                                           // 공격 후 부서질 거울 오브젝트
+    [SerializeField] private bool isMirrorAttacked = false;                               // 거울이 부서졌는지 여부
+    [SerializeField] private float dashDistance = 5f;                                     // 돌진 거리
+    [SerializeField] private float dashDuration = 0.5f;                                   // 돌진 시간
     private bool _isDashing = false;
     
     
     public override void Attack()        //  거울사제2(몬스터)의 플레이어 공격
     {                           //  만약 플레이어와 거울사제2(몬스터)의 거리가 공격 범위 내라면
-        if (Vector3.Distance(_player.position, transform.position) < attackDistance)
+        if (Vector3.Distance(player.position, transform.position) < attackDistance)
         {                       //  currentTime 카운트 시작
             currentTime += Time.deltaTime;
             if (currentTime > attackDelay)// currentTime이 attackDelay만큼 카운트 했다면 공격 진행

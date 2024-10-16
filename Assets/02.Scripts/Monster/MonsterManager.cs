@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class MonsterManager : Singleton<MonsterManager>, IManager
+public class MonsterManager :  IManager
 {
     public List<GeneratorMonsterInfo> generatorMonsterInfos; // 몬스터 정보가 담길 리스트
     // private List<GameObject> _foundMonsterList;              // 상위 프리팹이 담길 리스트
@@ -29,9 +29,9 @@ public class MonsterManager : Singleton<MonsterManager>, IManager
             // settingMonsterList.Add(_foundMonsterList[i].gameObject.transform.GetChild(chileIndex).gameObject);// 타입에 따라 프리팹 활성화
             settingMonsterList[i].gameObject.SetActive(true);
             _monsterFsm = settingMonsterList[i].GetComponent<MonsterFSM>();
-            _monsterFsm.isMovingMonster = generatorMonsterInfos[i].isMoving;    // 움직일지 여부 전달
-            _monsterFsm.movePositionGroup = generatorMonsterInfos[i].movePositionGroup;// 움직일 경로 전달
-            _monsterFsm._startPosition = generatorMonsterInfos[i].startPosition.position;
+            _monsterFsm.IsMovingMonster = generatorMonsterInfos[i].isMoving;    // 움직일지 여부 전달
+            _monsterFsm.MovePositionGroup = generatorMonsterInfos[i].movePositionGroup;// 움직일 경로 전달
+            _monsterFsm.StartPosition = generatorMonsterInfos[i].startPosition.position;
         }
     }
 
