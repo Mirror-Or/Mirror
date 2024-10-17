@@ -1,13 +1,18 @@
 using UnityEngine;
 
 [RequireComponent(typeof(LineRenderer))]
+public static class LayerSet
+{
+    public static LayerMask ClearLayer = LayerMask.NameToLayer("Clear");
+    public static LayerMask ReflectLayer = LayerMask.NameToLayer("Reflect");
+}
 public class LazerMon : MonoBehaviour
 {
     [SerializeField] private float defaultLength = 50;        // 레이저의 길이
     [SerializeField] private float reflectNum = 20;           // 반사 가능 횟수
-
-    private LayerMask _clearLayer = LayerMask.NameToLayer("Clear");
-    private LayerMask _reflectLayer = LayerMask.NameToLayer("Reflect");
+    
+    private LayerMask _clearLayer;
+    private LayerMask _reflectLayer;
     
     private LineRenderer _lineRenderer;      // 레이저 표시용 LineRenderer 변수
     private RaycastHit _hit;               // 오브젝트 충돌 체크용 Raycast 변수
@@ -15,6 +20,9 @@ public class LazerMon : MonoBehaviour
     
     private void Start()
     {
+        _clearLayer = LayerSet.ClearLayer;
+        _reflectLayer = LayerSet.ReflectLayer;
+        
         // LineRenderer 컴포넌트 받아옴
         _lineRenderer = GetComponent<LineRenderer>();   
     }
@@ -47,6 +55,8 @@ public class LazerMon : MonoBehaviour
             if (Physics.Raycast(ray.origin, ray.direction, out _hit, resetLen))
             {
                 LayerMask layer = _hit.transform.gameObject.layer;
+                // LineRenderer를 이전 위치에서 충돌 지점까지 그림
+                _lineRenderer.SetPosition(_lineRenderer.positionCount - 1, _hit.point);
                 
                 if (layer == _reflectLayer)
                 {
@@ -57,8 +67,6 @@ public class LazerMon : MonoBehaviour
                 {
                     ClearEvent();
                 }
-                // LineRenderer를 이전 위치에서 충돌 지점까지 그림
-                _lineRenderer.SetPosition(_lineRenderer.positionCount - 1, _hit.point);
             }
             else
             {

@@ -150,15 +150,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d26ae912adf5d674c9b763bdbb5ff908, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  reflectLayerMask:
-    serializedVersion: 2
-    m_Bits: 16384
-  defaultLayerMask:
-    serializedVersion: 2
-    m_Bits: 1
-  clearObj:
-    serializedVersion: 2
-    m_Bits: 32768
   defaultLength: 100
   reflectNum: 20
 --- !u!120 &4047462870123725018
@@ -182,7 +173,7 @@ LineRenderer:
   m_RenderingLayerMask: 257
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 2a1335cbdccba834d8b309796fd6cfd8, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

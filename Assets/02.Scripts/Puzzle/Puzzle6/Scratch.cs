@@ -5,11 +5,12 @@ public class Scratch : RaycastCheck, IInteractionable
 {
     [SerializeField] private List<GameObject> codeBlock;      // 코드 블록을 담을 리스트
     [SerializeField] private Camera myCam;                // Raycast 및 화면 전환할 카메라
-    [SerializeField] private GameObject inputBlock;       // 코드 블록이 들어갈 위치
+    [SerializeField] private GameObject inputBlockPos;       // 코드 블록이 들어갈 위치
     [SerializeField] private GameObject playButton;       // 실행 버튼
 
     [SerializeField] private bool test;                    // 상호작용 테스트 용 변수   *임시*
 
+    private GameObject _getCodeBlock;     // 실행할 코드 블럭
     private Vector3[] _codeBlockSetPos;   // 코드 블록들의 시작 위치
     private bool _interaction;            // 상호 작용 확인
     private bool _isDrag;                   // 드래그 중인지 확인할 bool 값
@@ -47,14 +48,14 @@ public class Scratch : RaycastCheck, IInteractionable
     {
         // 좌클릭을 눌렀을 때
         if(Input.GetMouseButtonDown(0)){
-            // 실행 버튼을 클릭했을 때
+            // 누른게 실행 버튼일 때 
             if (RayHitCheck(Input.mousePosition, myCam, playButton.transform))
             {
                 // 만약 코드 블록이 들어가 있을 때
-                if (inputBlock.transform.GetChild(0) != null)
+                if (_getCodeBlock != null)
                 {
                     // 코드 블록에 따른 이벤트를 실행한다.
-                    PlayCode(inputBlock.transform.GetChild(0).gameObject);
+                    PlayCode(_getCodeBlock);
                 }
                 // 아니면
                 else
@@ -67,7 +68,7 @@ public class Scratch : RaycastCheck, IInteractionable
             _nowDragButton = codeBlock.FindIndex(n => n.transform == RayHitCheck(Input.mousePosition, myCam));
             if(_nowDragButton != -1)
             {
-                codeBlock[_nowDragButton].transform.SetParent(gameObject.transform);
+                if (_getCodeBlock == codeBlock[_nowDragButton]) _getCodeBlock = null;
                 _isDrag = true;
             }
         }
@@ -77,23 +78,23 @@ public class Scratch : RaycastCheck, IInteractionable
             // 드래그 중지
             _isDrag = false;
             // 코드 블록과 Input Block의 거리를 잰다
-            var distance = Vector3.Distance(codeBlock[_nowDragButton].transform.position, inputBlock.transform.position);
+            var distance = Vector3.Distance(codeBlock[_nowDragButton].transform.position, inputBlockPos.transform.position);
 
             // 일정 범위 내에 코드 블록이 떨어졌다면
             if (distance < 0.75f)
             {
                 // 이미 Input Block안에 블록이 들어가 있을 경우
-                if (inputBlock.transform.childCount > 0)
+                if (_getCodeBlock != null)
                 {
                     // Input Block 안의 코드 블록을 조금 이동시킨 뒤
-                    inputBlock.transform.GetChild(0).transform.localPosition = new Vector3(-0.1f, 0, 0.15f);
+                    _getCodeBlock.transform.localPosition += new Vector3(0.1f,0, 0.1f);
                     // 코드 블록의 부모를 바꿔준다
-                    inputBlock.transform.GetChild(0).SetParent(gameObject.transform);
+                    _getCodeBlock = null;
                 }
                 // 드랍한 코드 블록의 부모를 Input Block로 변경해준다.
-                codeBlock[_nowDragButton].transform.SetParent(inputBlock.transform);
+                _getCodeBlock = codeBlock[_nowDragButton];
                 // 코드 블록의 위치를 Input Block의 위치로 변경해준다.
-                codeBlock[_nowDragButton].transform.localPosition = new Vector3(0, 0, 0);
+                _getCodeBlock.transform.position = inputBlockPos.transform.position;
             }
             // 드래그 종료 시에 코드블록이 카메라를 벗어났을 경우
             if (!CheckInCam(codeBlock[_nowDragButton]))
@@ -110,18 +111,16 @@ public class Scratch : RaycastCheck, IInteractionable
         var buttonPos = codeBlock[_nowDragButton].transform.localPosition;
         
         // 드래그 중일 때
-        if(_isDrag)
-        {
-            // 마우스의 위치 값을 저장
-            Vector3 position = new Vector3(Input.mousePosition.x,
-                Input.mousePosition.y, myCam.WorldToScreenPoint(transform.position).z);
+        if (!_isDrag) return;
+        // 마우스의 위치 값을 저장
+        Vector3 position = new Vector3(Input.mousePosition.x,
+            Input.mousePosition.y, myCam.WorldToScreenPoint(transform.position).z);
             
-            // 카메라 기준으로 position 값을 저장
-            Vector3 worldPosition = myCam.ScreenToWorldPoint(position);
+        // 카메라 기준으로 position 값을 저장
+        Vector3 worldPosition = myCam.ScreenToWorldPoint(position);
 
-            // 블럭이 마우스를 따라가도록 함
-            codeBlock[_nowDragButton].transform.localPosition = new Vector3(worldPosition.x, buttonPos.y, worldPosition.z);
-        }
+        // 블럭이 마우스를 따라가도록 함
+        codeBlock[_nowDragButton].transform.localPosition = new Vector3(worldPosition.x, buttonPos.y, worldPosition.z);
     }
 
     private bool CheckInCam(GameObject dragBlock)
@@ -155,7 +154,8 @@ public class Scratch : RaycastCheck, IInteractionable
     // 들어가 있는 코드 블록에 따라 이벤트를 실행한다.
     private void PlayCode(GameObject getCodeBlock)
     {
-        getCodeBlock.GetComponent<ICodeBlockEvent>().PlayEvent();
+        // 나중에 이벤트 추가 시 주석처리 해제
+        // getCodeBlock.GetComponent<ICodeBlockEvent>().PlayEvent();
         
         // 상호작용을 종료한다
         EndInteraction();
