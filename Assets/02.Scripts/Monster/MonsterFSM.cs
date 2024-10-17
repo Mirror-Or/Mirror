@@ -8,8 +8,8 @@ public class MonsterFSM : Monster,IDamage
 {
     public GameObject MovePositionGroup;              // 몬스터의 탐색경로 그룹
     public bool IsMovingMonster = true;               // 학생(몬스터)가 움직일지 여부
-    public List<Vector3> MoveDirectionList;           // 학생(몬스터)의 탐색 경로 지정리스트
-    public List<float> MoveDirectionDelayList;        // 학생(몬스터)각 경로에서 몇초 동안 멈출지 지정리스트
+    public List<Vector3> MoveDirectionList = new List<Vector3>();           // 학생(몬스터)의 탐색 경로 지정리스트
+    public List<float> MoveDirectionDelayList = new List<float>();        // 학생(몬스터)각 경로에서 몇초 동안 멈출지 지정리스트
     public enum MonsterState       // 몬스터의 FSM
     {
         Idle,
