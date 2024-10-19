@@ -5,29 +5,38 @@ public class IdleState : IPlayerState
 {
     public void EnterState(PlayerFSM playerFSM)
     {
-        Debug.Log("Entered Idle State");
+        Debug.Log("Idle 상태 시작");
     }
 
     public void UpdateState(PlayerFSM playerFSM)
     {
-        if (playerFSM.inputActions.move.magnitude > 0.1f)
+        if (playerFSM.inputActions.jump)
         {
-            playerFSM.ChangeState(new WalkingState());
+            playerFSM.ChangeState<JumpingState>();
+            return;
         }
         if (playerFSM.inputActions.isSit)
         {
-            Debug.Log("Sit");
-            playerFSM.ChangeState(new SittingState());
+            playerFSM.ChangeState<SittingState>();
+            return;
         }
         if (playerFSM.inputActions.isFire)
         {
-            playerFSM.ChangeState(new AttackState(playerFSM.combatController, playerFSM.movementController.CurretPosition, LayerMask.GetMask("Enemy")));
+            playerFSM.ChangeState<AttackState>(playerFSM.combatController, playerFSM.movementController.CurretPosition, LayerMask.GetMask("Enemy"));
+            return;
         }
+        if (playerFSM.inputActions.move != Vector2.zero)
+        {
+            playerFSM.ChangeState<WalkingState>();
+            return;
+        }
+
+        playerFSM.movementController.HandleMovement(playerFSM.inputActions.move, false);
     }
 
     public void ExitState(PlayerFSM playerFSM)
     {
-        Debug.Log("Exiting Idle State");
+        Debug.Log("Idle 상태 종료");
     }
 }
 

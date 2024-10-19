@@ -1686,6 +1686,9 @@ MonoBehaviour:
   _enemyLayer:
     serializedVersion: 2
     m_Bits: 0
+  _groundLayers:
+    serializedVersion: 2
+    m_Bits: 1
   _FPSAnimator: {fileID: 5866666021909216657}
   _3stAnimator: {fileID: 342469546014807951}
 --- !u!1 &170017581873631248

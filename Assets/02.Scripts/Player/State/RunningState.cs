@@ -8,7 +8,7 @@ public class RunningState : IPlayerState
 {
     public void EnterState(PlayerFSM playerFSM)
     {
-        Debug.Log("Entered Running State");
+        Debug.Log("Running 상태 시작");
     }
 
     public void UpdateState(PlayerFSM playerFSM)
@@ -18,20 +18,23 @@ public class RunningState : IPlayerState
         // 상태 전환
         if (!playerFSM.inputActions.sprint)
         {
-            playerFSM.ChangeState(new WalkingState());
+            playerFSM.ChangeState<WalkingState>();
+            return;
         }
         if (playerFSM.inputActions.jump)
         {
-            playerFSM.ChangeState(new JumpingState());
+            playerFSM.ChangeState<JumpingState>();
+            return;
         }
         if (playerFSM.inputActions.isFire)
         {
-            playerFSM.ChangeState(new AttackState(playerFSM.combatController, playerFSM.movementController.CurretPosition, LayerMask.GetMask("Enemy")));
+            playerFSM.ChangeState<AttackState>(playerFSM.combatController, playerFSM.movementController.CurretPosition, LayerMask.GetMask("Enemy"));
+            return;
         }
     }
 
     public void ExitState(PlayerFSM playerFSM)
     {
-        Debug.Log("Exiting Running State");
+        Debug.Log("Running 상태 종료");
     }
 }

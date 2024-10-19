@@ -125,6 +125,7 @@ public class PlayerMovementController
     #region 점프 및 낙하 처리
     public void HandleJump(bool isJump)
     {
+        Debug.Log($"HandleJump : {_isGrounded}");
         // 플레이어가 땅에 붙어있는 경우와 공중에 있는 경우를 나눠 처리
         if (_isGrounded)
         {

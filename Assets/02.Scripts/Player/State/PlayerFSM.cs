@@ -31,7 +31,7 @@ public class PlayerFSM
         {
             currentState = _stateCache[typeof(T)];
         }else{
-            Debug.Log($"{args.Length} : {args}");
+            // 추후 팩토리나 다른 생성 방법으로 변경 가능
             currentState = (T)Activator.CreateInstance(typeof(T), args);
             _stateCache[typeof(T)] = currentState;
         }
