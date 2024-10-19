@@ -8,7 +8,7 @@ public class MonsterStudent : MonsterFSM
 {
     public override void Attack()        //  학생(몬스터)의 플레이어 공격
     {                           //  만약 플레이어와 학생(몬스터)의 거리가 공격 범위 내라면
-        if (Vector3.Distance(_player.position, transform.position) < attackDistance)
+        if (Vector3.Distance(player.position, transform.position) < attackDistance)
         {                       //  currentTime 카운트 시작
             currentTime += Time.deltaTime;
             if (currentTime > attackDelay)// currentTime이 attackDelay만큼 카운트 했다면 공격 진행
