@@ -38,6 +38,8 @@ public class PlayerMovementController
     // 애니메이션 관련 변수
     private float _animationBlend;           // 애니메이션 블렌드 값 (이동 속도에 따른 애니메이션 전환 비율)
 
+    public bool IsGrounded => _isGrounded;
+    public Vector3 CurretPosition => _characterController.transform.position;
 
     public PlayerMovementController(CharacterController characterController, PlayerAnimationController animationController)
     {
@@ -185,7 +187,6 @@ public class PlayerMovementController
     // 앉기 처리    
     public void HandleSit(bool isSit){
         // 추후 이동속도 감소 등 추가 가능
-
 
         _animationController.SetAnimationBool(AnimatorParameters.IsSitting, isSit);
     }
