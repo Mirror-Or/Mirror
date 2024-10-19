@@ -94,7 +94,6 @@ GameObject:
   - component: {fileID: 2301432848667946146}
   - component: {fileID: 6912396042340879186}
   - component: {fileID: 6249510254116669150}
-  - component: {fileID: 9111892146994015181}
   m_Layer: 0
   m_Name: adecassol
   m_TagString: Item
@@ -112,7 +111,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.6695884, z: -0, w: 0.7427324}
   m_LocalPosition: {x: 2.141, y: 1.444, z: 4.371}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8647172658599665080}
@@ -156,18 +155,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   meshRenderers: []
   outlineMaterial: {fileID: 2100000, guid: 06df2334372858f40bc2b16ab7f485ce, type: 2}
---- !u!114 &9111892146994015181
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1493933214391399960}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d35c0fa807a0e84478f821e5a8b3e1c2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &5829115353260266905
 GameObject:
   m_ObjectHideFlags: 0
