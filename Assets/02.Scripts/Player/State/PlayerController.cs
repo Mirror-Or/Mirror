@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour
     private PlayerCombatController _combatController;
     private PlayerStatus _playerStatus;
 
-    [SerializeField] private LayerMask _enemyLayer;
+    [SerializeField] private LayerMask _enemyLayer;      // 적의 Layer
     [SerializeField] private LayerMask _groundLayers;    // 플레이어가 이동할 수 있는 Ground의 Layer
 
     [Header("Animation Settings")]
@@ -46,8 +46,8 @@ public class PlayerController : MonoBehaviour
         _cameraController = new(_playerCamera.gameObject.transform);
 
         // FSM 초기화
-        _playerFSM = new PlayerFSM(_movementController, _combatController, _playerInputAction, _cameraController);
-        _playerFSM.ChangeState(new IdleState()); // 초기 상태는 Idle로 설정
+        _playerFSM = new PlayerFSM(_movementController, _combatController, _playerInputAction);
+        _playerFSM.ChangeState<IdleState>(); // 초기 상태는 Idle로 설정
     }
 
     void Update()
@@ -55,7 +55,6 @@ public class PlayerController : MonoBehaviour
         // 매 프레임 FSM 업데이트
         _playerFSM.Update();
     }
-
 
     /// <summary>
     /// 플레이어 회전 처리
