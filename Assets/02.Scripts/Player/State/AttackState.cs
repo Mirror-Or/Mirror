@@ -22,16 +22,20 @@ public class AttackState : IPlayerState
     {
         Debug.Log("Attack 상태 시작");
         _combatController.PerformAttack(_playerPosition, _enemyLayer);
-         _attackTimer = _attackDuration;  // 상태가 시작되면 타이머 초기화
+        _attackTimer = _attackDuration;  // 상태가 시작되면 타이머 초기화
     }
 
     public void UpdateState(PlayerFSM playerFSM)
     {
         _attackTimer -= Time.deltaTime;  // 공격 타이머 감소
+        
+        // 공격 중에도 움직임을 처리할 수 있도록 이동 처리 추가
+        playerFSM.movementController.HandleMovement(playerFSM.inputActions.move, false);
 
         if(_attackTimer <= 0.0f)
         {
             playerFSM.ChangeState<IdleState>();         // 공격 후 Idle 상태로 전환
+            return;
         }
     }
 
