@@ -74,7 +74,6 @@ public class PlayerMovementController
         _groundedRadius = 0.28f;
     }
 
-
     // 플레이어의 이동을 처리하는 함수
     public void HandleMovement(Vector2 inputDirection, bool isSprinting )
     {
@@ -123,49 +122,81 @@ public class PlayerMovementController
         _animationController.SetAnimationFloat(AnimatorParameters.Speed, _animationBlend);
     }
 
+    #region 점프 및 낙하 처리
     public void HandleJump(bool isJump)
     {
-        if(_isGrounded)
+        // 플레이어가 땅에 붙어있는 경우와 공중에 있는 경우를 나눠 처리
+        if (_isGrounded)
         {
-            // 땅에 붙어 있는 경우 점프 애니메이션 및 속도 초기화
-            _fallTimeout = 0.15f;
-
-            _animationController.SetAnimationBool(AnimatorParameters.IsJumping, false); // 점프 애니메이션 종료
-
-            if(isJump && _jumpTimeout <= 0.0f)
-            {
-                // 점프 (점프 높이 * 중력 * 보정 값)
-                _verticalVelocity = Mathf.Sqrt(_jumpHeight * -2.0f * _gravity);
-                _animationController.SetAnimationBool(AnimatorParameters.IsJumping, true);  // 점프 애니메이션 시작
-            }
-
-            // 점프 타임아웃 처리
-            if(_jumpTimeout >= 0.0f)
-            {
-                _jumpTimeout -= Time.deltaTime;
-            }
+            HandleGroundedJump(isJump);  // 땅에 붙어 있을 때의 점프 로직 처리
         }
         else
         {
-            // 공중에 있을 때 낙하 처리
-            _jumpTimeout = 0.5f;
-
-            if(_fallTimeout >= 0.0f)
-            {
-                _fallTimeout -= Time.deltaTime;
-            }
-
-            _animationController.SetAnimationBool(AnimatorParameters.IsJumping, false);  // 공중 애니메이션 처리
+            HandleAirborne();  // 공중에 있을 때의 낙하 로직 처리
         }
 
-        // 중력과 수직 속도 처리
-        if(_verticalVelocity < _terminalVelocity)
+        MoveCharacter(); // 최종적으로 플레이어 이동 처리
+    }
+
+    // 땅에 붙어 있을 때의 점프 처리 함수
+    private void HandleGroundedJump(bool isJump)
+    {
+        // 낙하 타임아웃 초기화 (플레이어가 다시 땅에 닿을 때까지의 시간)
+        _fallTimeout = 0.15f;
+        
+        // 점프 애니메이션 종료
+        _animationController.SetAnimationBool(AnimatorParameters.IsJumping, false);
+
+        // 플레이어가 점프 버튼을 눌렀고, 점프 타임아웃이 끝난 상태라면 점프 실행
+        if (isJump && _jumpTimeout <= 0.0f)
+        {
+            // 점프 높이, 중력 및 보정 값을 이용한 수직 속도 계산 (점프 동작)
+            _verticalVelocity = Mathf.Sqrt(_jumpHeight * -2.0f * _gravity);
+
+            // 점프 애니메이션 시작
+            _animationController.SetAnimationBool(AnimatorParameters.IsJumping, true);
+        }
+
+        // 점프 타임아웃 처리
+        if (_jumpTimeout >= 0.0f)
+        {
+            _jumpTimeout -= Time.deltaTime;
+        }
+    }
+
+    // 공중에 있을 때 낙하 처리 함수
+    private void HandleAirborne()
+    {
+        // 점프 타임아웃 초기화 (공중에 있는 동안 다시 점프하지 않도록 제한)
+        _jumpTimeout = 0.5f;
+
+        // 낙하 타임아웃 감소 (플레이어가 떨어지는 중)
+        if (_fallTimeout >= 0.0f)
+        {
+            _fallTimeout -= Time.deltaTime;
+        }
+
+        // 공중에서의 애니메이션 처리
+        _animationController.SetAnimationBool(AnimatorParameters.IsJumping, false);
+    }
+
+    // 중력 적용 및 수직 속도 계산 함수
+    private void ApplyGravity()
+    {
+        // 현재 수직 속도가 터미널 속도에 도달하지 않았다면 중력 적용
+        if (_verticalVelocity < _terminalVelocity)
         {
             _verticalVelocity += _gravity * Time.deltaTime;
         }
+    }
 
-        // 점프 후 캐릭터 이동
+    // 캐릭터 이동 처리 함수
+    private void MoveCharacter()
+    {
+        // 수직 이동 벡터 설정 (0, 수직 속도, 0)
         _verticalMovement.Set(0, _verticalVelocity, 0);
+
+        // 캐릭터 이동 처리 (프레임당 이동 거리 계산)
         _characterController.Move(_verticalMovement * Time.deltaTime);
     }
 
@@ -180,9 +211,12 @@ public class PlayerMovementController
         // 땅에 붙어 있는지 여부를 체크
         _isGrounded = Physics.CheckSphere(groundCheckPosition, _groundedRadius, groundLayers, QueryTriggerInteraction.Ignore);
 
+        ApplyGravity(); // 중력 적용
+
         // 애니메이션에 grounded 상태 반영
         _animationController.SetAnimationBool(AnimatorParameters.IsGrounded, _isGrounded);
     }
+    #endregion
     
     // 앉기 처리    
     public void HandleSit(bool isSit){
