@@ -1,0 +1,32 @@
+{
+	"adecassol": {
+		"itemName" : "아데카솔",
+		"itemDiscription" : "새살이 솔솔~ 아데카솔!",
+		"itemType" : "Medical",
+		"iitemIconPath" : "Items/Sprite/Ammo9mm",
+		"quantity" : 0,
+		"statChanges": [
+            {
+                "Stat": "Health",
+                "ChangeAmount": 20.0,
+                "Duration": 5.0,
+                "RepeatCount": 1
+            }
+        ]
+	},
+	"legenol": {
+		"itemName" : "아데카솔1",
+		"itemDiscription" : "새살이 솔솔~ 아데카솔!",
+		"itemType" : "Medical",
+		"iitemIconPath" : "Items/Sprite/Ammo9mm",
+		"quantity" : 0,
+		"statChanges": [
+            {
+                "Stat": "Health",
+                "ChangeAmount": 20.0,
+                "Duration": 5.0,
+                "RepeatCount": 1
+            }
+        ]
+	}
+}
