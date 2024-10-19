@@ -24,8 +24,6 @@ public class InventoryManager : MonoBehaviour, IItemContainer
     public GameObject Text_ItemDescription;
     //
 
-    public BaseItem[] testitems;
-
     private UIManager _UIManager;
 
     public bool Use_Inventory = false;
