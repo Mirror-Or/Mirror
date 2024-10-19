@@ -32,6 +32,8 @@ public abstract class ItemBase : MonoBehaviour, IInteractable
     public string ItemIconPath { get; protected set; }      // 아이템 아이콘 경로
     public int Quantity { get; protected set; }             // 남은 개수
 
+    public Sprite ItemIcon { get; protected set; }          // 아이템 아이콘
+
     // ItemData를 통해 아이템의 기본 정보를 초기화
     public virtual void Initialize(ItemData itemData)
     {
@@ -41,6 +43,9 @@ public abstract class ItemBase : MonoBehaviour, IInteractable
         this.ItemDiscription = itemData.itemDiscription;
         this.ItemIconPath = itemData.itemIconPath;
         this.Quantity = itemData.quantity;
+
+        // 아이템 아이콘을 설정
+        SetIcon();
     }
 
     // 공통으로 제공되는 사용/줍기/버리기 메서드
@@ -63,6 +68,20 @@ public abstract class ItemBase : MonoBehaviour, IInteractable
     public virtual void Interact()
     {
         Debug.Log($"{ItemName}와 상호작용하였습니다.");
+        Use();
         // 상호작용 로직
+    }
+
+    // 아이템 아이콘을 설정
+    private void SetIcon()
+    {
+        // 아이템 아이콘을 설정
+        if(ItemIconPath == null)
+        {
+            Debug.LogWarning("아이템 아이콘 경로가 설정되지 않았습니다.");
+            return;    
+        }
+
+        ItemIcon = GameManager.resourceManager.LoadResource<Sprite>(ItemIconPath);
     }
 }
