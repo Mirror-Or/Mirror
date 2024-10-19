@@ -8,27 +8,22 @@ public class JumpingState : IPlayerState
 {
     public void EnterState(PlayerFSM playerFSM)
     {
-        Debug.Log("Entered Jumping State");
-        playerFSM.movementController.HandleJump(true); // 점프 시작
+        Debug.Log("Jumping 상태 시작");
+        playerFSM.movementController.HandleJump(true);  // 점프 한 번만 실행
     }
 
     public void UpdateState(PlayerFSM playerFSM)
-    {
+    { 
         // 착지 상태로 전환
         if (playerFSM.movementController.IsGrounded)
         {
-            playerFSM.ChangeState(new WalkingState());
-        }
-
-        // 공격 상태로 전환
-        if (playerFSM.inputActions.isFire)
-        {
-            playerFSM.ChangeState(new AttackState(playerFSM.combatController, playerFSM.movementController.CurretPosition, LayerMask.GetMask("Enemy")));
+            playerFSM.ChangeState<IdleState>();  // 착지하면 Idle 상태로 전환
         }
     }
 
     public void ExitState(PlayerFSM playerFSM)
     {
-        Debug.Log("Exiting Jumping State");
+        Debug.Log("Jumping 상태 종료");
+        playerFSM.movementController.HandleJump(false);  // 점프 한 번만 실행
     }
 }
