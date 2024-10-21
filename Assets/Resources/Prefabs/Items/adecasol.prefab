@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 6912396042340879186}
   - component: {fileID: 6249510254116669150}
   m_Layer: 0
-  m_Name: adecassol
+  m_Name: adecasol
   m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
