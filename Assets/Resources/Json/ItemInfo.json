@@ -1,7 +1,7 @@
 {
   "items": [
     {
-      "itemID": "item001",
+      "itemID": "adecasol",
       "itemName": "아데카솔",
       "itemDescription": "새살이 솔솔~ 아데카솔!",
       "itemIconPath": "Items/Sprite/Ammo9mm",
@@ -13,6 +13,12 @@
           "changeAmount": 50,
           "duration": 0,
           "repeatCount": 1
+        },
+        {
+          "stat": "Mental",
+          "changeAmount": 30,
+          "duration": 0,
+          "repeatCount": 1
         }
       ]
     },
@@ -20,7 +26,7 @@
       "itemID": "item002",
       "itemName": "Bandage",
       "itemDescription": "Heals small wounds.",
-      "itemIconPath": "icons/bandage",
+      "itemIconPath": "Items/Sprite/Ammo9mm",
       "itemType": "Medical",
       "quantity": 10,
       "statChanges": [
@@ -34,17 +40,17 @@
     },
     {
       "itemID": "item003",
-      "itemName": "Quest Item A",
-      "itemDescription": "Important quest item.",
-      "itemIconPath": "icons/quest_item",
+      "itemName": "퀘스트 아이템 A",
+      "itemDescription": "퀘스트 아이템",
+      "itemIconPath": "Items/Sprite/Ammo9mm",
       "itemType": "Quest",
       "quantity": 1
     },
     {
       "itemID": "item004",
-      "itemName": "Flashlight",
-      "itemDescription": "Lights up dark areas.",
-      "itemIconPath": "icons/flashlight",
+      "itemName": "플래시라이트",
+      "itemDescription": "불을 밝혀줍니다.",
+      "itemIconPath": "Items/Sprite/Ammo9mm",
       "itemType": "Functional",
       "quantity": 1
     }
