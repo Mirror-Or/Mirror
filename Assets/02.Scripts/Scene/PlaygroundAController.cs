@@ -15,9 +15,10 @@ public class PlaygroundAController : MonoBehaviour
             gameManager = Instantiate(Resources.Load("Prefabs/GameManager") as GameObject);
             gameManager.GetComponent<GameManager>().Initialize(SceneConstants.PlaygroundA);
 
-            // 아이템 생성
-            GameManager.itemManager.SpawnItem("adecassol", _itemSpawnPoint.position);
         }
+
+        // 아이템 스폰
+        GameManager.itemManager.SpawnItem("adecasol", _itemSpawnPoint.position);
 
         Vector3 spawnPoint = new(0, 4.0f, 0);
         GameManager.playerManager.SpawnPlayer(spawnPoint);
