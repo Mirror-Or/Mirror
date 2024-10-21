@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
-public class MonsterFSM : Monster,IDamage
+public class OldMonsterFSM : OldMonster,IDamage
 {
     public GameObject MovePositionGroup;              // 몬스터의 탐색경로 그룹
     public bool IsMovingMonster = true;               // 학생(몬스터)가 움직일지 여부

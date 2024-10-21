@@ -10,7 +10,7 @@ public class MonsterManager :  IManager
     // private List<GameObject> _foundMonsterList;              // 상위 프리팹이 담길 리스트
     public List<GameObject> SettingMonsterList = new List<GameObject>();              // 몬스터의 정보를 수정하고 담을 리스트 
 
-    private MonsterFSM _monsterFsm;                          // 몬스터 FSM 컴포넌트
+    private OldMonsterFSM _monsterFsm;                          // 몬스터 FSM 컴포넌트
     
     public enum MonsterType
     {
@@ -27,7 +27,7 @@ public class MonsterManager :  IManager
         for (int i = 0; i < GeneratorMonsterInfos.Count; i++)
         { 
             SettingMonsterList[i].gameObject.SetActive(true);
-            _monsterFsm = SettingMonsterList[i].GetComponent<MonsterFSM>();
+            _monsterFsm = SettingMonsterList[i].GetComponent<OldMonsterFSM>();
             _monsterFsm.IsMovingMonster = GeneratorMonsterInfos[i].isMoving;    // 움직일지 여부 전달
             _monsterFsm.MovePositionGroup = GeneratorMonsterInfos[i].movePositionGroup;// 움직일 경로 전달
             _monsterFsm.StartPosition = GeneratorMonsterInfos[i].startPosition.position;

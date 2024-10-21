@@ -4,7 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class MonsterStudent : MonsterFSM
+public class OldMonsterStudent : OldMonsterFSM
 {
     public override void Attack()        //  학생(몬스터)의 플레이어 공격
     {                           //  만약 플레이어와 학생(몬스터)의 거리가 공격 범위 내라면

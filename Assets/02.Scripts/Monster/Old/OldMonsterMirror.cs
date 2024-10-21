@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using Random = UnityEngine.Random;
 
-public class MonsterMirror : MonsterFSM
+public class OldMonsterMirror : OldMonsterFSM
 {
     [SerializeField] private GameObject mirror;                                           // 공격 후 부서질 거울 오브젝트
     [SerializeField] private bool isMirrorAttacked = false;                               // 거울이 부서졌는지 여부

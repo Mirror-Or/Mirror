@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Monster : MonoBehaviour
+public class OldMonster : MonoBehaviour
 {
     //   기본 상태값
     public Vector3 StartPosition;     // 학생(몬스터)의 시작 위치
