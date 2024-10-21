@@ -3,5 +3,5 @@
 /// </summary>
 public interface IInteractable
 {
-    void Interact();
+    public void Interact();
 }
