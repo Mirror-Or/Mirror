@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using Newtonsoft.Json;
 using UnityEngine;
 
 /// <summary>
@@ -25,16 +26,21 @@ public class SaveLoadManager
 	/// <param name="filePath"></param>
     public static T Load<T>(string filePath)
     {
+        string json = LoadToString(filePath);
+        return JsonUtility.FromJson<T>(json);
+    }
+
+    public static string LoadToString(string filePath)
+    {
         TextAsset textAsset = Resources.Load<TextAsset>(filePath);  // Resources 폴더에서 TextAsset 로드
         if (textAsset != null)
         {
-            string json = textAsset.text;
-            return JsonUtility.FromJson<T>(json);
+            return textAsset.text;
         }
         else
         {
             Debug.LogWarning($"{filePath} 파일이 존재하지 않습니다.");
-            return default(T);	// 파일이 존재하지 않을 경우 기본값 반환
+            return null;
         }
     }
 }
