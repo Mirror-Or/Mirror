@@ -2,24 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum ItemType
-{
-    Medical,
-    Quest,
-    Functional,
-    Weapon
-}
-
-public class ItemData
-{
-    public string itemID;
-    public string itemName;
-    public string itemDiscription;
-    public ItemType itemType;
-    public string itemIconPath;
-    public int quantity;
-}
-
 /// <summary>
 /// 아이템의 기본적인 속성과 동작을 정의하는 클래스
 /// </summary>
@@ -34,13 +16,12 @@ public abstract class ItemBase : MonoBehaviour, IInteractable
 
     public Sprite ItemIcon { get; protected set; }          // 아이템 아이콘
 
-    // ItemData를 통해 아이템의 기본 정보를 초기화
     public virtual void Initialize(ItemData itemData)
     {
         this.ItemName = itemData.itemName;
         this.ItemID = itemData.itemID;
         this.ItemType = itemData.itemType;
-        this.ItemDiscription = itemData.itemDiscription;
+        this.ItemDiscription = itemData.itemDescription;
         this.ItemIconPath = itemData.itemIconPath;
         this.Quantity = itemData.quantity;
 
@@ -68,8 +49,6 @@ public abstract class ItemBase : MonoBehaviour, IInteractable
     public virtual void Interact()
     {
         Debug.Log($"{ItemName}와 상호작용하였습니다.");
-        Use();
-        // 상호작용 로직
     }
 
     // 아이템 아이콘을 설정
