@@ -1,32 +1,52 @@
 {
-	"adecassol": {
-		"itemName" : "아데카솔",
-		"itemDiscription" : "새살이 솔솔~ 아데카솔!",
-		"itemType" : "Medical",
-		"iitemIconPath" : "Items/Sprite/Ammo9mm",
-		"quantity" : 0,
-		"statChanges": [
-            {
-                "Stat": "Health",
-                "ChangeAmount": 20.0,
-                "Duration": 5.0,
-                "RepeatCount": 1
-            }
-        ]
-	},
-	"legenol": {
-		"itemName" : "아데카솔1",
-		"itemDiscription" : "새살이 솔솔~ 아데카솔!",
-		"itemType" : "Medical",
-		"iitemIconPath" : "Items/Sprite/Ammo9mm",
-		"quantity" : 0,
-		"statChanges": [
-            {
-                "Stat": "Health",
-                "ChangeAmount": 20.0,
-                "Duration": 5.0,
-                "RepeatCount": 1
-            }
-        ]
-	}
+  "items": [
+    {
+      "itemID": "item001",
+      "itemName": "아데카솔",
+      "itemDescription": "새살이 솔솔~ 아데카솔!",
+      "itemIconPath": "Items/Sprite/Ammo9mm",
+      "itemType": "Medical",
+      "quantity": 5,
+      "statChanges": [
+        {
+          "stat": "Health",
+          "changeAmount": 50,
+          "duration": 0,
+          "repeatCount": 1
+        }
+      ]
+    },
+    {
+      "itemID": "item002",
+      "itemName": "Bandage",
+      "itemDescription": "Heals small wounds.",
+      "itemIconPath": "icons/bandage",
+      "itemType": "Medical",
+      "quantity": 10,
+      "statChanges": [
+        {
+          "stat": "Health",
+          "changeAmount": 20,
+          "duration": 0,
+          "repeatCount": 1
+        }
+      ]
+    },
+    {
+      "itemID": "item003",
+      "itemName": "Quest Item A",
+      "itemDescription": "Important quest item.",
+      "itemIconPath": "icons/quest_item",
+      "itemType": "Quest",
+      "quantity": 1
+    },
+    {
+      "itemID": "item004",
+      "itemName": "Flashlight",
+      "itemDescription": "Lights up dark areas.",
+      "itemIconPath": "icons/flashlight",
+      "itemType": "Functional",
+      "quantity": 1
+    }
+  ]
 }
