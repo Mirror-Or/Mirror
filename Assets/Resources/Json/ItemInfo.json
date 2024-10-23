@@ -7,52 +7,109 @@
       "itemIconPath": "Items/Sprite/Ammo9mm",
       "itemType": "Medical",
       "quantity": 5,
+      "repeatCount": 1,
       "statChanges": [
         {
           "stat": "Health",
           "changeAmount": 50,
-          "duration": 0,
-          "repeatCount": 1
-        },
-        {
-          "stat": "Mental",
-          "changeAmount": 30,
-          "duration": 0,
-          "repeatCount": 1
+          "duration": 5
         }
       ]
     },
     {
-      "itemID": "item002",
-      "itemName": "Bandage",
-      "itemDescription": "Heals small wounds.",
+      "itemID": "legenol",
+      "itemName": "레게놀",
+      "itemDescription": "누군가의 착각으로 지어진 이름의 약",
       "itemIconPath": "Items/Sprite/Ammo9mm",
       "itemType": "Medical",
       "quantity": 10,
+      "repeatCount": 1,
       "statChanges": [
         {
-          "stat": "Health",
-          "changeAmount": 20,
-          "duration": 0,
-          "repeatCount": 1
+          "stat": "Mental",
+          "changeAmount": 30,
+          "duration": 5
         }
       ]
     },
     {
-      "itemID": "item003",
-      "itemName": "퀘스트 아이템 A",
-      "itemDescription": "퀘스트 아이템",
+      "itemID": "bendaid",
+      "itemName": "밴드에이드",
+      "itemDescription": "까진 상처에도, 종이에 베인 상처에도 아주 훌륭한 반창고.",
       "itemIconPath": "Items/Sprite/Ammo9mm",
-      "itemType": "Quest",
-      "quantity": 1
+      "itemType": "Medical",
+      "quantity": 1,
+      "repeatCount": 1,
+      "statChanges": [
+        {
+          "stat": "Speed",
+          "changeAmount": 0,
+          "duration": 0
+        }
+      ]
     },
     {
-      "itemID": "item004",
-      "itemName": "플래시라이트",
-      "itemDescription": "불을 밝혀줍니다.",
+      "itemID": "bendaid",
+      "itemName": "밴드에이드",
+      "itemDescription": "까진 상처에도, 종이에 베인 상처에도 아주 훌륭한 반창고.",
       "itemIconPath": "Items/Sprite/Ammo9mm",
-      "itemType": "Functional",
-      "quantity": 1
+      "itemType": "Medical",
+      "quantity": 1,
+      "repeatCount": 1,
+      "statChanges": [
+        {
+          "stat": "Speed",
+          "changeAmount": 0,
+          "duration": 0
+        }
+      ]
+    },
+    {
+      "itemID": "firstaidkit",
+      "itemName": "구급상자",
+      "itemDescription": "보건 선생님의 애착 상자.",
+      "itemIconPath": "Items/Sprite/Ammo9mm",
+      "itemType": "Medical",
+      "quantity": 1,
+      "repeatCount": 1,
+      "statChanges": [
+        {
+          "stat": "Speed",
+          "changeAmount": 0,
+          "duration": 0
+        },
+        {
+          "stat": "Health",
+          "changeAmount": 100,
+          "duration": 0
+        }
+      ]
+    },
+    {
+      "itemID": "misteryampule",
+      "itemName": "구급상자",
+      "itemDescription": "보건 선생님의 애착 상자.",
+      "itemIconPath": "Items/Sprite/Ammo9mm",
+      "itemType": "Medical",
+      "quantity": 2,
+      "repeatCount": 3,
+      "statChanges": [
+        {
+          "stat": "Health",
+          "changeAmount": 70,
+          "duration": 0
+        },
+        {
+          "stat": "Mental",
+          "changeAmount": -30,
+          "duration": 0
+        },
+        {
+          "stat": "Speed",
+          "changeAmount": 10,
+          "duration": 0
+        }
+      ]
     }
   ]
 }
