@@ -18,9 +18,8 @@ public class PlayerMovementController
     private Vector3 _moveDirection;          // 현재 이동 방향 (X, Z 방향)
     private float _targetSpeed;              // 목표 이동 속도 (걷기 또는 달리기 속도)
     private float _speedOffset;              // 이동 속도 변경을 위한 오프셋 값 (속도 변화 허용 범위)
-    private float _walkSpeed;                // 걷기 속도
-    private float _runSpeed;                 // 달리기 속도
     private float _speedChangeRate;          // 이동 속도 변경 비율 (속도 전환 속도)
+    private bool _isSitting;                 // 앉은 상태 여부
 
     // 점프 관련 변수
     private bool _isGrounded;                // 캐릭터가 땅에 붙어 있는지 여부
@@ -55,8 +54,6 @@ public class PlayerMovementController
         _targetSpeed = 0.0f;
         _speedOffset = 0.1f;
         _speedChangeRate = PlayerBasicSettings.speedChangeRate;
-        _walkSpeed = PlayerBasicSettings.walkSpeed;
-        _runSpeed = PlayerBasicSettings.runSpeed;
         _animationBlend = 0.0f;
 
         // 점프 관련 변수 초기화
@@ -76,8 +73,13 @@ public class PlayerMovementController
     // 플레이어의 이동을 처리하는 함수
     public void HandleMovement(Vector2 inputDirection, bool isSprinting )
     {
-        // 이동 속도 결정
-        _targetSpeed = isSprinting ? _runSpeed : _walkSpeed;
+        if(_isSitting){
+            _targetSpeed = PlayerBasicSettings.sitSpeed;
+        }else{
+            // 이동 속도 결정
+            _targetSpeed = isSprinting ? PlayerBasicSettings.runSpeed : PlayerBasicSettings.walkSpeed;
+        }
+
         if(inputDirection == Vector2.zero) _targetSpeed = 0.0f;
 
         // 이동 방향 계산
@@ -184,8 +186,7 @@ public class PlayerMovementController
     
     // 앉기 처리    
     public void HandleSit(bool isSit){
-        // 추후 이동속도 감소 등 추가 가능
-
+        _isSitting = isSit;
 
         _animationController.SetAnimationBool(AnimatorParameters.IsSitting, isSit);
     }
