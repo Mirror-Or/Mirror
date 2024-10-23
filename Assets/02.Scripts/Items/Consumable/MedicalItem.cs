@@ -60,6 +60,12 @@ public class MedicalItem : ItemBase
     // Use 메서드에서 상태 변화 처리
     public override void Use()
     {
+        if(this.Quantity <= 0)
+        {
+            Debug.Log("아이템 개수가 부족합니다.");
+            return;
+        }
+        
         base.Use();
 
         foreach (var statChange in StatChanges)
