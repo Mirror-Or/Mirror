@@ -1,8 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using UnityEngine;
+using UnityEngine.AI;
 
 /// <summary>
 /// 스텟 변화 아이템 클래스
@@ -21,9 +23,8 @@ public enum StatType
 public class StatChange
 {
     public StatType stat;
-    public int changeAmount;
-    public float duration;
-    public int repeatCount;
+    public int changeAmount;        // 변화량
+    public float duration;          // 지속시간
 }
 
 /// <summary>
@@ -32,6 +33,8 @@ public class StatChange
 public class MedicalItem : ItemBase
 {
     public List<StatChange> StatChanges {get; protected set;}    // 속성 변화 목록
+    public int RepeatCount {get; protected set;}                 // 반복 사용 가능 횟수
+    private int _orignRepeatCount;                               // 반복 사용 가능 횟수
 
     private  PlayerStatus _playerStatus; // 플레이어 상태 참조
 
@@ -45,6 +48,9 @@ public class MedicalItem : ItemBase
         Debug.Log($"{itemData.statChanges.Count}");
 
         StatChanges = itemData.statChanges;
+
+        _orignRepeatCount = itemData.repeatCount;
+        RepeatCount = itemData.repeatCount;
 
         _playerStatus = GameManager.playerManager.GetPlayerStatus();
     }
@@ -60,31 +66,18 @@ public class MedicalItem : ItemBase
     // Use 메서드에서 상태 변화 처리
     public override void Use()
     {
-        if(this.Quantity <= 0)
+        if(HasEnoughQuantity())
         {
             Debug.Log("아이템 개수가 부족합니다.");
             return;
         }
-        
+
         base.Use();
+        
+        ProcessStatChanges();
 
-        foreach (var statChange in StatChanges)
-        {
-            if (statChange.duration == 0) 
-            {
-                // 즉발성 효과 적용
-                ApplyImmediateEffect(statChange);
-            }
-            else
-            {
-                // 지속성 효과 적용 (코루틴으로 반복 처리)
-                StartCoroutine(ApplyOverTime(statChange));
-            }
-        }
-
-        // 아이템 사용후 아이템 개수 감소
-        this.Quantity--;
-        Debug.Log($"{ItemName}의 남은 개수 : {Quantity}");
+        UpdateItemRepeatCount();
+        Debug.Log($"{ItemName}의 남은 개수 : {Quantity} / 반복 사용 가능 횟수 : {RepeatCount}");
     }
 
     // 즉발성 효과 적용
@@ -113,7 +106,7 @@ public class MedicalItem : ItemBase
     // 지속성 효과 적용 (코루틴)
     private IEnumerator ApplyOverTime(StatChange statChange)
     {
-        for (int i = 0; i < statChange.repeatCount; i++)
+        for (int i = 0; i < RepeatCount; i++)
         {
             switch (statChange.stat)
             {
@@ -168,5 +161,44 @@ public class MedicalItem : ItemBase
     {
         Debug.Log("Applying speed change: " + change.changeAmount);
         _playerStatus.AdjustStatus(StatType.Speed, change.changeAmount);
+    }
+
+    /// <summary>
+    /// 아이템 사용에 따른 스테이터스 변화 처리
+    /// </summary>
+    private void ProcessStatChanges(){
+
+        if(StatChanges == null || StatChanges.Count == 0) return;
+
+        foreach (var statChange in StatChanges)
+        {
+            if (statChange.duration == 0) 
+            {
+                // 즉발성 효과 적용
+                ApplyImmediateEffect(statChange);
+            }
+            else
+            {
+                // 지속성 효과 적용 (코루틴으로 반복 처리)
+                StartCoroutine(ApplyOverTime(statChange));
+            }
+        }
+    }
+
+    /// <summary>
+    /// 아이템 사용에 따른 반복 사용 가능 횟수 및 아이템 개수 감소 처리
+    /// </summary>
+    private void UpdateItemRepeatCount(){
+        if(RepeatCount <=1 ){
+            Quantity--;
+            RepeatCount = (Quantity > 0) ? _orignRepeatCount : 0;
+        }else{
+            RepeatCount--;
+        }
+    }
+
+    // 아이템 개수가 충분한 지 확인
+    private bool HasEnoughQuantity(){
+        return this.RepeatCount == 0 && this.Quantity == 0;
     }
 }
