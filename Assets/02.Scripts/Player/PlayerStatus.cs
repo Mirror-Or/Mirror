@@ -3,13 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-[Serializable]
-public enum StatusType
-{
-    Health,
-    Mental
-}
-
 /// <summary>
 /// 플레이어의 기본 설정을 관리하는 클래스
 /// </summary>

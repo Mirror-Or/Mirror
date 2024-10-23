@@ -18,7 +18,7 @@ public class PlaygroundAController : MonoBehaviour
         }
 
         // 아이템 스폰
-        GameManager.itemManager.SpawnItem("adecasol", _itemSpawnPoint.position);
+        GameManager.itemManager.SpawnItem("misteryampule", _itemSpawnPoint.position);
 
         Vector3 spawnPoint = new(0, 4.0f, 0);
         GameManager.playerManager.SpawnPlayer(spawnPoint);
