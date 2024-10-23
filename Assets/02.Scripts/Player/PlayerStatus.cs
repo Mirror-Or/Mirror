@@ -59,19 +59,22 @@ public class PlayerStatus
     /// </summary>
     /// <param name="statusType">조절할 Status</param>
     /// <param name="amount">조절 양</param>
-    public void AdjustStatus(StatusType statusType, float amount)
+    public void AdjustStatus(StatType statusType, float amount)
     {
         switch(statusType)
         {
-            case StatusType.Health:
+            case StatType.Health:
                 float newHealth = Mathf.Clamp(CurrentHealth + amount, 0, PlayerBasicSettings.maxHealth);
                 if(newHealth != CurrentHealth){
                     CurrentHealth = newHealth;
                     OnHealthChanged?.Invoke(CurrentHealth);
                 }
                 break;
-            case StatusType.Mental:
+            case StatType.Mental:
                 CurrentMental = Mathf.Clamp(CurrentMental + amount, 0, PlayerBasicSettings.maxMental);
+                break;
+            case StatType.Speed:
+                // @TODO:추후 이동속도 감소를 어떻게 처리할지 결정
                 break;
         }
     }

@@ -62,7 +62,7 @@ public class PlayerManager :  IManager, IDamage
     {
         if(_playerStatus.CurrentHealth <= 0) return;  // 이미 사망한 경우 데미지를 받지 않음
 
-        _playerStatus.AdjustStatus(StatusType.Health, -hitPower);
+        _playerStatus.AdjustStatus(StatType.Health, -hitPower);
 
         // 피격 효과음 재생
         // if(playerStatus.CurrentHealth > 0){

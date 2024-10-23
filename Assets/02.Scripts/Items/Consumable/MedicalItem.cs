@@ -33,6 +33,8 @@ public class MedicalItem : ItemBase
 {
     public List<StatChange> StatChanges {get; protected set;}    // 속성 변화 목록
 
+    private  PlayerStatus _playerStatus; // 플레이어 상태 참조
+
     public void Initialize(MedicalItemData itemData)
     {
         base.Initialize(itemData);
@@ -43,6 +45,16 @@ public class MedicalItem : ItemBase
         Debug.Log($"{itemData.statChanges.Count}");
 
         StatChanges = itemData.statChanges;
+
+        _playerStatus = GameManager.playerManager.GetPlayerStatus();
+    }
+
+    public override void Interact()
+    {
+        base.Interact();
+
+        Use();
+        // 아이템 사용에 따른 플레이어 스테이터스 변화 필요
     }
 
     // Use 메서드에서 상태 변화 처리
@@ -63,6 +75,10 @@ public class MedicalItem : ItemBase
                 StartCoroutine(ApplyOverTime(statChange));
             }
         }
+
+        // 아이템 사용후 아이템 개수 감소
+        this.Quantity--;
+        Debug.Log($"{ItemName}의 남은 개수 : {Quantity}");
     }
 
     // 즉발성 효과 적용
@@ -73,14 +89,17 @@ public class MedicalItem : ItemBase
             case StatType.Health:
                 Debug.Log($"{statChange.changeAmount}만큼 체력이 즉시 회복되었습니다.");
                 // 체력 회복 로직
+                ApplyHealthChange(statChange);
                 break;
             case StatType.Mental:
                 Debug.Log($"{statChange.changeAmount}만큼 정신력이 즉시 변경되었습니다.");
                 // 정신력 변화 로직
+                ApplyMentalChange(statChange);
                 break;
             case StatType.Speed:
                 Debug.Log($"이동속도가 {statChange.changeAmount}만큼 즉시 변경되었습니다.");
                 // 이동속도 변화 로직
+                ApplySpeedChange(statChange);
                 break;
         }
     }
@@ -95,14 +114,17 @@ public class MedicalItem : ItemBase
                 case StatType.Health:
                     Debug.Log($"{statChange.changeAmount}만큼 체력이 {statChange.duration}초에 걸쳐 회복됩니다.");
                     // 체력 회복 로직
+                    ApplyHealthChange(statChange);
                     break;
                 case StatType.Mental:
                     Debug.Log($"{statChange.changeAmount}만큼 정신력이 {statChange.duration}초에 걸쳐 변경됩니다.");
                     // 정신력 변화 로직
+                    ApplyMentalChange(statChange);
                     break;
                 case StatType.Speed:
                     Debug.Log($"이동속도가 {statChange.changeAmount}만큼 {statChange.duration}초에 걸쳐 변경됩니다.");
                     // 이동속도 변화 로직
+                    ApplySpeedChange(statChange);
                     break;
             }
 
@@ -110,25 +132,35 @@ public class MedicalItem : ItemBase
         }
     }
 
+    // @TODO: 추후 현재 스테이터스 상태가 가득찬 상태일 때에도 아이템이 사용되는지 확인 필요
+
     // 체력 변화 로직
     private void ApplyHealthChange(StatChange change)
     {
         // 플레이어의 체력에 changeAmount만큼 변화를 줌
         Debug.Log("Applying health change: " + change.changeAmount);
-        // 예: 플레이어의 체력을 증가/감소시키는 코드 작성
+
+        float currentHealth = _playerStatus.CurrentHealth;
+        _playerStatus.AdjustStatus(StatType.Health, change.changeAmount);
+
+        Debug.Log($"기존 체력 : {currentHealth} / 현재 체력 : {_playerStatus.CurrentHealth}");
     }
 
     // 정신력 변화 로직
     private void ApplyMentalChange(StatChange change)
     {
         Debug.Log("Applying mental change: " + change.changeAmount);
-        // 예: 플레이어의 정신력에 변화를 주는 코드 작성
+
+        float currentMental = _playerStatus.CurrentMental;
+        _playerStatus.AdjustStatus(StatType.Mental, change.changeAmount);
+
+        Debug.Log($"기존 체력 : {currentMental}  현재 정신력 : {_playerStatus.CurrentMental}");
     }
 
     // 속도 변화 로직
     private void ApplySpeedChange(StatChange change)
     {
         Debug.Log("Applying speed change: " + change.changeAmount);
-        // 예: 플레이어의 이동 속도에 변화를 주는 코드 작성
+        _playerStatus.AdjustStatus(StatType.Speed, change.changeAmount);
     }
 }
