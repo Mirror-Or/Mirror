@@ -5,30 +5,108 @@ using UnityEngine;
 
 public class Monster : MonoBehaviour
 {
-    [SerializeField] private MonsterAbility monsterAbility;
-    private MonsterFSM _monsterFsm;
-    [SerializeField] private MonsterFSM.MonsterState _monsterState;
-    void Start()
+    
+}
+public class MonsterIdle : MonoBehaviour, IState<MonsterController>
+{
+    
+    private MonsterController _monsterController;
+
+    public void OperateEnter(MonsterController sender)
     {
-        _monsterFsm = GetComponent<MonsterFSM>();
-        _monsterState = MonsterFSM.MonsterState.Idle;
+        _monsterController = sender;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void OperateUpdate(MonsterController sender)
     {
-        switch (_monsterState)
-        {
-            case MonsterFSM.MonsterState.Idle:
-                break;
-            case MonsterFSM.MonsterState.Move:
-                break;
-            case MonsterFSM.MonsterState.Attack:
-                break;
-            case MonsterFSM.MonsterState.Damage:
-                break;
-            case MonsterFSM.MonsterState.Die:
-                break;
-        }        
+        
+    }
+
+    public void OperateExit(MonsterController sender)
+    {
+        
+    }
+}
+public class MonsterMove : MonoBehaviour, IState<MonsterController>
+{
+    
+    private MonsterController _monsterController;
+
+    public void OperateEnter(MonsterController sender)
+    {
+        _monsterController = sender;
+    }
+
+    public void OperateUpdate(MonsterController sender)
+    {
+        
+    }
+
+    public void OperateExit(MonsterController sender)
+    {
+        
+    }
+}
+
+public class MonsterAttack : MonoBehaviour, IState<MonsterController>
+{
+    
+    private MonsterController _monsterController;
+
+    public void OperateEnter(MonsterController sender)
+    {
+        _monsterController = sender;
+    }
+
+    public void OperateUpdate(MonsterController sender)
+    {
+        
+    }
+
+    public void OperateExit(MonsterController sender)
+    {
+        
+    }
+}
+
+public class MonsterDamage : MonoBehaviour, IState<MonsterController>
+{
+    
+    private MonsterController _monsterController;
+
+    public void OperateEnter(MonsterController sender)
+    {
+        _monsterController = sender;
+    }
+
+    public void OperateUpdate(MonsterController sender)
+    {
+        
+    }
+
+    public void OperateExit(MonsterController sender)
+    {
+        
+    }
+}
+
+public class MonsterDie : MonoBehaviour, IState<MonsterController>
+{
+    
+    private MonsterController _monsterController;
+
+    public void OperateEnter(MonsterController sender)
+    {
+        _monsterController = sender;
+    }
+
+    public void OperateUpdate(MonsterController sender)
+    {
+        
+    }
+
+    public void OperateExit(MonsterController sender)
+    {
+        
     }
 }
